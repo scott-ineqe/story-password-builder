@@ -13,6 +13,10 @@ export default {
       },
     },
     extend: {
+      fontFamily: {
+        display: ['Cinzel', 'serif'],
+        body: ['Inter', 'sans-serif'],
+      },
       colors: {
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
@@ -46,6 +50,16 @@ export default {
         card: {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
+        },
+        gold: {
+          glow: "hsl(var(--gold-glow))",
+        },
+        strength: {
+          weak: "hsl(var(--strength-weak))",
+          fair: "hsl(var(--strength-fair))",
+          good: "hsl(var(--strength-good))",
+          strong: "hsl(var(--strength-strong))",
+          legendary: "hsl(var(--strength-legendary))",
         },
         sidebar: {
           DEFAULT: "hsl(var(--sidebar-background))",
