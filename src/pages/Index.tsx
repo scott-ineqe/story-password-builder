@@ -11,7 +11,7 @@ const Index = () => {
   return (
     <div className="min-h-screen palace-gradient flex items-center justify-center p-4">
       {/* Ambient glow */}
-      <div className="fixed top-0 left-1/2 -translate-x-1/2 w-[600px] h-[600px] bg-primary rounded-full blur-[150px] pointer-events-none" />
+      <div className="fixed top-0 left-1/2 -translate-x-1/2 w-[600px] h-[600px] bg-primary/5 rounded-full blur-[150px] pointer-events-none" />
 
       <div className="w-full max-w-md relative z-10">
         {/* Header — always visible */}
@@ -20,7 +20,7 @@ const Index = () => {
           animate={{ opacity: 1, y: 0 }}
           className="text-center mb-8"
         >
-          <div className="inline-flex items-center justify-center w-14 h-14 rounded-2xl bg-primary border border-primary/20 mb-4 gold-glow">
+          <div className="inline-flex items-center justify-center w-14 h-14 rounded-2xl bg-primary/15 border border-primary/20 mb-4 gold-glow">
             <KeyRound className="w-7 h-7 text-primary" />
           </div>
           <h1 className="text-3xl font-display text-foreground gold-text-glow">
@@ -28,7 +28,7 @@ const Index = () => {
           </h1>
           <p className="text-muted-foreground mt-2 text-sm flex items-center justify-center gap-1.5">
             <Shield className="w-3.5 h-3.5" />
-            Build unforgettable passwords through stories!
+            Build unforgettable passwords through stories (I made an edit!) (I made another edit)
           </p>
         </motion.div>
 
