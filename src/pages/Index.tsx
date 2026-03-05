@@ -9,7 +9,7 @@ const Index = () => {
   const [selectedScenario, setSelectedScenario] = useState<number | null>(null);
 
   return (
-    <div className="min-h-screen palace-gradient flex items-center justify-center p-4">
+    <div className="bg-[#df7a1d] min-h-screen palace-gradient flex items-center justify-center p-4">
       {/* Ambient glow */}
       <div className="fixed top-0 left-1/2 -translate-x-1/2 w-[600px] h-[600px] bg-primary/5 rounded-full blur-[150px] pointer-events-none" />
 
