@@ -13,7 +13,7 @@ interface Props {
   onPasswordForged?: (entry: HistoryEntry) => void;
 }
 
-export default function PasswordWizard({ scenario, onBack }: Props) {
+export default function PasswordWizard({ scenario, onBack, onPasswordForged }: Props) {
   const [currentStep, setCurrentStep] = useState(0);
   const [answers, setAnswers] = useState<string[]>(Array(scenario.steps.length).fill(''));
   const [error, setError] = useState<string | null>(null);
