@@ -6,6 +6,7 @@ import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import StrengthMeter from './StrengthMeter';
 import { HistoryEntry } from './SessionHistory';
+import PasswordComposer, { areAllRequirementsMet } from './PasswordComposer';
 
 interface Props {
   scenario: Scenario;
@@ -17,9 +18,11 @@ export default function PasswordWizard({ scenario, onBack, onPasswordForged }: P
   const [currentStep, setCurrentStep] = useState(0);
   const [answers, setAnswers] = useState<string[]>(Array(scenario.steps.length).fill(''));
   const [error, setError] = useState<string | null>(null);
-  const [finished, setFinished] = useState(false);
+  const [phase, setPhase] = useState<'steps' | 'compose' | 'finished'>('steps');
+  const [composedPassword, setComposedPassword] = useState('');
 
   const step = scenario.steps[currentStep];
+  const totalSteps = scenario.steps.length + 1; // +1 for compose step
 
   const handleNext = () => {
     const val = answers[currentStep].trim();
@@ -32,25 +35,40 @@ export default function PasswordWizard({ scenario, onBack, onPasswordForged }: P
     if (currentStep < scenario.steps.length - 1) {
       setCurrentStep(currentStep + 1);
     } else {
-      setFinished(true);
-      const password = scenario.buildPassword(answers.map(a => a.trim()));
-      const story = scenario.buildStory(answers.map(a => a.trim()));
-      const result = scorePassword(password);
-      onPasswordForged?.({
-        id: crypto.randomUUID(),
-        scenarioTitle: scenario.title,
-        scenarioIcon: scenario.icon,
-        password,
-        score: result.score,
-        label: result.label,
-        story,
-        timestamp: new Date(),
-      });
+      setPhase('compose');
     }
   };
 
+  const handleForge = () => {
+    if (!composedPassword.trim()) {
+      setError('Type your password first!');
+      return;
+    }
+    if (!areAllRequirementsMet(scenario.steps, answers, composedPassword)) {
+      setError('Include all ingredients in your password');
+      return;
+    }
+    setError(null);
+    setPhase('finished');
+    const story = scenario.buildStory(answers.map(a => a.trim()));
+    const result = scorePassword(composedPassword);
+    onPasswordForged?.({
+      id: crypto.randomUUID(),
+      scenarioTitle: scenario.title,
+      scenarioIcon: scenario.icon,
+      password: composedPassword,
+      score: result.score,
+      label: result.label,
+      story,
+      timestamp: new Date(),
+    });
+  };
+
   const handlePrev = () => {
-    if (currentStep > 0) {
+    if (phase === 'compose') {
+      setPhase('steps');
+      setError(null);
+    } else if (currentStep > 0) {
       setError(null);
       setCurrentStep(currentStep - 1);
     }
@@ -64,20 +82,23 @@ export default function PasswordWizard({ scenario, onBack, onPasswordForged }: P
   };
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
-    if (e.key === 'Enter') handleNext();
+    if (e.key === 'Enter') {
+      if (phase === 'compose') handleForge();
+      else handleNext();
+    }
   };
 
   const reset = () => {
     setCurrentStep(0);
     setAnswers(Array(scenario.steps.length).fill(''));
     setError(null);
-    setFinished(false);
+    setPhase('steps');
+    setComposedPassword('');
   };
 
-  if (finished) {
-    const password = scenario.buildPassword(answers);
+  if (phase === 'finished') {
     const story = scenario.buildStory(answers);
-    const result = scorePassword(password);
+    const result = scorePassword(composedPassword);
     const weakResult = scoreCommonPassword('P@ssword1');
 
     return (
@@ -107,7 +128,7 @@ export default function PasswordWizard({ scenario, onBack, onPasswordForged }: P
           <p className="text-sm text-muted-foreground mb-2">Your password:</p>
           <div className="flex items-center gap-3 bg-background/50 rounded-lg p-4 border border-primary/30">
             <Lock className="w-5 h-5 text-primary shrink-0" />
-            <code className="text-xl font-mono text-primary break-all">{password}</code>
+            <code className="text-xl font-mono text-primary break-all">{composedPassword}</code>
           </div>
         </motion.div>
 
@@ -163,6 +184,9 @@ export default function PasswordWizard({ scenario, onBack, onPasswordForged }: P
     );
   }
 
+  const isComposePhase = phase === 'compose';
+  const canForge = isComposePhase && areAllRequirementsMet(scenario.steps, answers, composedPassword);
+
   return (
     <motion.div
       initial={{ opacity: 0 }}
@@ -170,15 +194,17 @@ export default function PasswordWizard({ scenario, onBack, onPasswordForged }: P
       className="w-full max-w-md mx-auto space-y-6"
     >
       <div className="flex items-center justify-between">
-        <button onClick={onBack} className="text-muted-foreground hover:text-foreground transition-colors text-sm flex items-center gap-1">
-          <ArrowLeft className="w-4 h-4" /> Scenarios
+        <button onClick={isComposePhase ? handlePrev : onBack} className="text-muted-foreground hover:text-foreground transition-colors text-sm flex items-center gap-1">
+          <ArrowLeft className="w-4 h-4" /> {isComposePhase ? 'Back' : 'Scenarios'}
         </button>
         <div className="flex gap-1.5">
-          {scenario.steps.map((_, i) => (
+          {Array.from({ length: totalSteps }).map((_, i) => (
             <div
               key={i}
               className={`h-1.5 w-8 rounded-full transition-colors ${
-                i <= currentStep ? 'bg-primary' : 'bg-secondary'
+                i <= (isComposePhase ? scenario.steps.length : currentStep)
+                  ? 'bg-primary'
+                  : 'bg-secondary'
               }`}
             />
           ))}
@@ -187,65 +213,102 @@ export default function PasswordWizard({ scenario, onBack, onPasswordForged }: P
 
       <div className="text-center space-y-1">
         <p className="text-xs text-muted-foreground uppercase tracking-widest">
-          Step {currentStep + 1} of {scenario.steps.length}
+          {isComposePhase
+            ? `Final Step`
+            : `Step ${currentStep + 1} of ${totalSteps}`}
         </p>
-        <h2 className="text-lg font-display text-primary">{scenario.title}</h2>
+        <h2 className="text-lg font-display text-primary">
+          {isComposePhase ? 'Forge Your Password' : scenario.title}
+        </h2>
       </div>
 
       <AnimatePresence mode="wait">
-        <motion.div
-          key={step.id}
-          initial={{ opacity: 0, x: 30 }}
-          animate={{ opacity: 1, x: 0 }}
-          exit={{ opacity: 0, x: -30 }}
-          transition={{ duration: 0.25 }}
-          className="space-y-4"
-        >
-          <div className="bg-secondary/30 rounded-xl p-6 border border-border space-y-4">
-            <div className="flex items-start gap-3">
-              <Shield className="w-5 h-5 text-primary mt-0.5 shrink-0" />
-              <div>
-                <p className="text-foreground font-medium">{step.prompt}</p>
-                <p className="text-sm text-muted-foreground mt-1">{step.hint}</p>
-              </div>
-            </div>
-
-            <Input
-              value={answers[currentStep]}
-              onChange={(e) => handleInput(e.target.value)}
+        {isComposePhase ? (
+          <motion.div
+            key="compose"
+            initial={{ opacity: 0, x: 30 }}
+            animate={{ opacity: 1, x: 0 }}
+            exit={{ opacity: 0, x: -30 }}
+            transition={{ duration: 0.25 }}
+          >
+            <PasswordComposer
+              steps={scenario.steps}
+              answers={answers}
+              password={composedPassword}
+              onChange={(v) => { setComposedPassword(v); setError(null); }}
               onKeyDown={handleKeyDown}
-              placeholder={step.placeholder}
-              className="bg-background/50 border-border focus:border-primary text-foreground"
-              maxLength={step.type === 'special' ? 1 : step.type === 'number' ? 4 : 50}
-              autoFocus
             />
-
             {error && (
               <motion.p
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
-                className="text-sm text-destructive"
+                className="text-sm text-destructive mt-2 text-center"
               >
                 {error}
               </motion.p>
             )}
-          </div>
-        </motion.div>
+          </motion.div>
+        ) : (
+          <motion.div
+            key={step.id}
+            initial={{ opacity: 0, x: 30 }}
+            animate={{ opacity: 1, x: 0 }}
+            exit={{ opacity: 0, x: -30 }}
+            transition={{ duration: 0.25 }}
+            className="space-y-4"
+          >
+            <div className="bg-secondary/30 rounded-xl p-6 border border-border space-y-4">
+              <div className="flex items-start gap-3">
+                <Shield className="w-5 h-5 text-primary mt-0.5 shrink-0" />
+                <div>
+                  <p className="text-foreground font-medium">{step.prompt}</p>
+                  <p className="text-sm text-muted-foreground mt-1">{step.hint}</p>
+                </div>
+              </div>
+
+              <Input
+                value={answers[currentStep]}
+                onChange={(e) => handleInput(e.target.value)}
+                onKeyDown={handleKeyDown}
+                placeholder={step.placeholder}
+                className="bg-background/50 border-border focus:border-primary text-foreground"
+                maxLength={step.type === 'special' ? 1 : step.type === 'number' ? 4 : 50}
+                autoFocus
+              />
+
+              {error && (
+                <motion.p
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  className="text-sm text-destructive"
+                >
+                  {error}
+                </motion.p>
+              )}
+            </div>
+          </motion.div>
+        )}
       </AnimatePresence>
 
       <div className="flex gap-3">
-        {currentStep > 0 && (
+        {(currentStep > 0 || isComposePhase) && (
           <Button variant="outline" onClick={handlePrev} className="flex-1">
             <ArrowLeft className="w-4 h-4 mr-2" /> Back
           </Button>
         )}
-        <Button onClick={handleNext} className="flex-1">
-          {currentStep < scenario.steps.length - 1 ? (
-            <>Next <ArrowRight className="w-4 h-4 ml-2" /></>
-          ) : (
-            <>Forge Password <Sparkles className="w-4 h-4 ml-2" /></>
-          )}
-        </Button>
+        {isComposePhase ? (
+          <Button onClick={handleForge} className="flex-1" disabled={!canForge}>
+            Forge Password <Sparkles className="w-4 h-4 ml-2" />
+          </Button>
+        ) : (
+          <Button onClick={handleNext} className="flex-1">
+            {currentStep < scenario.steps.length - 1 ? (
+              <>Next <ArrowRight className="w-4 h-4 ml-2" /></>
+            ) : (
+              <>Build Password <ArrowRight className="w-4 h-4 ml-2" /></>
+            )}
+          </Button>
+        )}
       </div>
     </motion.div>
   );
