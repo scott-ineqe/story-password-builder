@@ -5,13 +5,15 @@ import { Scenario, scorePassword, scoreCommonPassword } from '@/lib/scenarios';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import StrengthMeter from './StrengthMeter';
+import { HistoryEntry } from './SessionHistory';
 
 interface Props {
   scenario: Scenario;
   onBack: () => void;
+  onPasswordForged?: (entry: HistoryEntry) => void;
 }
 
-export default function PasswordWizard({ scenario, onBack }: Props) {
+export default function PasswordWizard({ scenario, onBack, onPasswordForged }: Props) {
   const [currentStep, setCurrentStep] = useState(0);
   const [answers, setAnswers] = useState<string[]>(Array(scenario.steps.length).fill(''));
   const [error, setError] = useState<string | null>(null);
@@ -31,6 +33,19 @@ export default function PasswordWizard({ scenario, onBack }: Props) {
       setCurrentStep(currentStep + 1);
     } else {
       setFinished(true);
+      const password = scenario.buildPassword(answers.map(a => a.trim()));
+      const story = scenario.buildStory(answers.map(a => a.trim()));
+      const result = scorePassword(password);
+      onPasswordForged?.({
+        id: crypto.randomUUID(),
+        scenarioTitle: scenario.title,
+        scenarioIcon: scenario.icon,
+        password,
+        score: result.score,
+        label: result.label,
+        story,
+        timestamp: new Date(),
+      });
     }
   };
 
