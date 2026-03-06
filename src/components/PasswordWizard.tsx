@@ -99,6 +99,7 @@ export default function PasswordWizard({ scenario, onBack, onPasswordForged }: P
   if (phase === 'finished') {
     const story = scenario.buildStory(answers);
     const result = scorePassword(composedPassword);
+    const badResult = scoreCommonPassword('abc123');
     const weakResult = scoreCommonPassword('P@ssword1');
 
     return (
@@ -143,7 +144,11 @@ export default function PasswordWizard({ scenario, onBack, onPasswordForged }: P
             <StrengthMeter score={result.score} label={result.label} />
           </div>
           <div>
-            <p className="text-sm text-muted-foreground mb-1">vs. "P@ssword1"</p>
+            <p className="text-sm text-muted-foreground mb-1">vs. "abc123" (common bad password)</p>
+            <StrengthMeter score={badResult.score} label={badResult.label} />
+          </div>
+          <div>
+            <p className="text-sm text-muted-foreground mb-1">vs. "P@ssword1" (looks strong, isn't)</p>
             <StrengthMeter score={weakResult.score} label={weakResult.label} />
           </div>
         </motion.div>
@@ -163,11 +168,11 @@ export default function PasswordWizard({ scenario, onBack, onPasswordForged }: P
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.9 }}
-            className="space-y-1"
+            className="bg-accent/10 rounded-xl p-4 border border-accent/30 space-y-2"
           >
-            <p className="text-xs text-muted-foreground">Tips to go even higher:</p>
+            <p className="text-sm font-semibold text-accent font-display">💡 Tips to go even higher</p>
             {result.tips.map((tip, i) => (
-              <p key={i} className="text-xs text-accent">• {tip}</p>
+              <p key={i} className="text-sm text-foreground">• {tip}</p>
             ))}
           </motion.div>
         )}
