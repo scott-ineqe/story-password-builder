@@ -144,7 +144,11 @@ export default function PasswordWizard({ scenario, onBack, onPasswordForged }: P
             <StrengthMeter score={result.score} label={result.label} />
           </div>
           <div>
-            <p className="text-sm text-muted-foreground mb-1">vs. "P@ssword1"</p>
+            <p className="text-sm text-muted-foreground mb-1">vs. "abc123" (common bad password)</p>
+            <StrengthMeter score={badResult.score} label={badResult.label} />
+          </div>
+          <div>
+            <p className="text-sm text-muted-foreground mb-1">vs. "P@ssword1" (looks strong, isn't)</p>
             <StrengthMeter score={weakResult.score} label={weakResult.label} />
           </div>
         </motion.div>
