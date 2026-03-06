@@ -21,9 +21,9 @@ export default function ScenarioCard({ scenario, index, onSelect }: Props) {
       <div className="flex items-start gap-4">
         <span className="text-3xl">{scenario.icon}</span>
         <div>
-          <h3 className="font-display text-foreground group-hover:text-primary transition-colors">
+          <h2 className="font-display text-foreground group-hover:text-primary transition-colors">
             {scenario.title}
-          </h3>
+          </h2>
           <p className="text-sm text-muted-foreground mt-1">{scenario.description}</p>
         </div>
       </div>
