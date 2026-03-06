@@ -18,7 +18,7 @@ export default function ScenarioCard({ scenario, index, onSelect }: Props) {
       onClick={onSelect}
       className="w-full text-left bg-secondary/40 hover:bg-secondary/60 border border-border hover:border-primary/40 rounded-xl p-5 transition-colors group"
     >
-      <div className="flex items-start gap-4">
+      <div className="flex items-start gap-4" style="border: 1px solid #ecedf6;">
         <span className="text-3xl">{scenario.icon}</span>
         <div>
           <h3 className="font-display text-foreground group-hover:text-primary transition-colors">
