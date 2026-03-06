@@ -5,10 +5,12 @@ import { Scenario, scorePassword, scoreCommonPassword } from '@/lib/scenarios';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import StrengthMeter from './StrengthMeter';
+import { HistoryEntry } from './SessionHistory';
 
 interface Props {
   scenario: Scenario;
   onBack: () => void;
+  onPasswordForged?: (entry: HistoryEntry) => void;
 }
 
 export default function PasswordWizard({ scenario, onBack }: Props) {
