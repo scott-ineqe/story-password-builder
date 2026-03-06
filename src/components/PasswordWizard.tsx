@@ -168,11 +168,11 @@ export default function PasswordWizard({ scenario, onBack, onPasswordForged }: P
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.9 }}
-            className="space-y-1"
+            className="bg-accent/10 rounded-xl p-4 border border-accent/30 space-y-2"
           >
-            <p className="text-xs text-muted-foreground">Tips to go even higher:</p>
+            <p className="text-sm font-semibold text-accent font-display">💡 Tips to go even higher</p>
             {result.tips.map((tip, i) => (
-              <p key={i} className="text-xs text-accent">• {tip}</p>
+              <p key={i} className="text-sm text-foreground">• {tip}</p>
             ))}
           </motion.div>
         )}
