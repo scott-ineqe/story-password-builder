@@ -99,6 +99,7 @@ export default function PasswordWizard({ scenario, onBack, onPasswordForged }: P
   if (phase === 'finished') {
     const story = scenario.buildStory(answers);
     const result = scorePassword(composedPassword);
+    const badResult = scoreCommonPassword('abc123');
     const weakResult = scoreCommonPassword('P@ssword1');
 
     return (
