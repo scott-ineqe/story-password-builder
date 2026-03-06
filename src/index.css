@@ -155,8 +155,8 @@
   .palace-gradient {
     background: radial-gradient(
       circle at top center, 
-      hsl(246, 45%, 25%),
-      hsl(216, 57%, 12%)
+      hsl(0.69, 0.33, 0.10),
+      hsl(0.68, 50.36, 0.05)
     );
   }
 }
