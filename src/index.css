@@ -4,10 +4,6 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Definition of the design system. All colors, gradients, fonts, etc should be defined here. 
-All colors MUST be HSL.
-*/
-
 @layer base {
   :root {
     --background: 0 0% 100%;
@@ -131,8 +127,6 @@ All colors MUST be HSL.
   }
 }
 
-@@ -100,6 +61,28 @@ All colors MUST be HSL.
-  }
 
   body {
     @apply bg-background text-foreground;
@@ -142,7 +136,6 @@ All colors MUST be HSL.
   h1, h2, h3, h4, h5, h6 {
     font-family: 'Cinzel', serif;
   }
-}
 
 @layer utilities {
   .font-display {
