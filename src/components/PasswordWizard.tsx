@@ -33,6 +33,19 @@ export default function PasswordWizard({ scenario, onBack, onPasswordForged }: P
       setCurrentStep(currentStep + 1);
     } else {
       setFinished(true);
+      const password = scenario.buildPassword(answers.map(a => a.trim()));
+      const story = scenario.buildStory(answers.map(a => a.trim()));
+      const result = scorePassword(password);
+      onPasswordForged?.({
+        id: crypto.randomUUID(),
+        scenarioTitle: scenario.title,
+        scenarioIcon: scenario.icon,
+        password,
+        score: result.score,
+        label: result.label,
+        story,
+        timestamp: new Date(),
+      });
     }
   };
 
