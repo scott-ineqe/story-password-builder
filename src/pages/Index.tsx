@@ -30,7 +30,7 @@ const Index = () => {
           <h1 className="text-3xl font-display text-foreground gold-text-glow">Memory Palace</h1>
           <p className="text-muted-foreground mt-2 text-sm flex items-center justify-center gap-1.5">
             <Shield className="w-3.5 h-3.5" />
-            Build unforgettable passwords through stories!
+            Build unforgettable passwords through stories! This is a test
           </p>
         </motion.div>
 
