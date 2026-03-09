@@ -20,6 +20,13 @@ export default function PasswordWizard({ scenario, onBack, onPasswordForged }: P
   const [error, setError] = useState<string | null>(null);
   const [phase, setPhase] = useState<'steps' | 'compose' | 'finished'>('steps');
   const [composedPassword, setComposedPassword] = useState('');
+  const [copied, setCopied] = useState(false);
+
+  const handleCopy = () => {
+    navigator.clipboard.writeText(composedPassword);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
+  };
 
   const step = scenario.steps[currentStep];
   const totalSteps = scenario.steps.length + 1; // +1 for compose step
