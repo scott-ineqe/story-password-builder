@@ -35,13 +35,15 @@ const Index = () => {
         </motion.div>
 
         {selectedScenario === null ? (
-          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="space-y-3">
+          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
             <p className="text-xs text-muted-foreground uppercase tracking-widest text-center mb-4">
               Choose your path
             </p>
-            {scenarios.map((scenario, i) => (
-              <ScenarioCard key={scenario.id} scenario={scenario} index={i} onSelect={() => setSelectedScenario(i)} />
-            ))}
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              {scenarios.map((scenario, i) => (
+                <ScenarioCard key={scenario.id} scenario={scenario} index={i} onSelect={() => setSelectedScenario(i)} />
+              ))}
+            </div>
           </motion.div>
         ) : (
           <PasswordWizard
