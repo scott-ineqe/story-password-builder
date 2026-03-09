@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Shield, ArrowRight, ArrowLeft, Sparkles, RotateCcw, Lock } from 'lucide-react';
+import { Shield, ArrowRight, ArrowLeft, Sparkles, RotateCcw, Lock, Copy, Check } from 'lucide-react';
 import { Scenario, scorePassword, scoreCommonPassword } from '@/lib/scenarios';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
@@ -20,6 +20,13 @@ export default function PasswordWizard({ scenario, onBack, onPasswordForged }: P
   const [error, setError] = useState<string | null>(null);
   const [phase, setPhase] = useState<'steps' | 'compose' | 'finished'>('steps');
   const [composedPassword, setComposedPassword] = useState('');
+  const [copied, setCopied] = useState(false);
+
+  const handleCopy = () => {
+    navigator.clipboard.writeText(composedPassword);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
+  };
 
   const step = scenario.steps[currentStep];
   const totalSteps = scenario.steps.length + 1; // +1 for compose step
@@ -129,7 +136,14 @@ export default function PasswordWizard({ scenario, onBack, onPasswordForged }: P
           <p className="text-sm text-muted-foreground mb-2">Your password:</p>
           <div className="flex items-center gap-3 bg-background/50 rounded-lg p-4 border border-primary/30">
             <Lock className="w-5 h-5 text-primary shrink-0" />
-            <code className="text-xl font-mono text-primary break-all">{composedPassword}</code>
+            <code className="text-xl font-mono text-primary break-all flex-1">{composedPassword}</code>
+            <button
+              onClick={handleCopy}
+              className="shrink-0 p-1.5 rounded-md hover:bg-primary/10 transition-colors text-muted-foreground hover:text-primary"
+              aria-label="Copy password"
+            >
+              {copied ? <Check className="w-4 h-4 text-green-500" /> : <Copy className="w-4 h-4" />}
+            </button>
           </div>
         </motion.div>
 
