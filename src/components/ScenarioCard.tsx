@@ -16,7 +16,7 @@ export default function ScenarioCard({ scenario, index, onSelect }: Props) {
       whileHover={{ scale: 1.02, y: -2 }}
       whileTap={{ scale: 0.98 }}
       onClick={onSelect}
-      className="w-full text-left bg-secondary/80 hover:bg-secondary/60 border border-border hover:border-primary/40 rounded-xl p-5 transition-colors group"
+      className="w-full text-left bg-card border border-border hover:border-primary/40 rounded-xl p-5 transition-colors group shadow-md"
     >
       <div className="flex items-start gap-4">
         <span className="text-3xl">{scenario.icon}</span>
