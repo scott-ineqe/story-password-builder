@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Shield, ArrowRight, ArrowLeft, Sparkles, RotateCcw, Lock } from 'lucide-react';
+import { Shield, ArrowRight, ArrowLeft, Sparkles, RotateCcw, Lock, Copy, Check } from 'lucide-react';
 import { Scenario, scorePassword, scoreCommonPassword } from '@/lib/scenarios';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
