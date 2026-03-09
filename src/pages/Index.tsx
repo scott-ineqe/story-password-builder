@@ -18,7 +18,7 @@ const Index = () => {
     <div className="min-h-screen palace-gradient flex items-center justify-center p-4">
       <div className="fixed top-0 left-1/2 -translate-x-1/2 w-[600px] h-[600px] bg-primary/15 rounded-full blur-[150px] pointer-events-none" />
 
-      <div className="w-full max-w-md relative z-10">
+      <div className="w-full max-w-2xl relative z-10">
         <motion.div
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -30,18 +30,20 @@ const Index = () => {
           <h1 className="text-3xl font-display text-foreground gold-text-glow">Memory Palace</h1>
           <p className="text-muted-foreground mt-2 text-sm flex items-center justify-center gap-1.5">
             <Shield className="w-3.5 h-3.5" />
-            Build unforgettable passwords through stories! This is a test
+            Build unforgettable passwords through stories!
           </p>
         </motion.div>
 
         {selectedScenario === null ? (
-          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="space-y-3">
+          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
             <p className="text-xs text-muted-foreground uppercase tracking-widest text-center mb-4">
               Choose your path
             </p>
-            {scenarios.map((scenario, i) => (
-              <ScenarioCard key={scenario.id} scenario={scenario} index={i} onSelect={() => setSelectedScenario(i)} />
-            ))}
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              {scenarios.map((scenario, i) => (
+                <ScenarioCard key={scenario.id} scenario={scenario} index={i} onSelect={() => setSelectedScenario(i)} />
+              ))}
+            </div>
           </motion.div>
         ) : (
           <PasswordWizard
