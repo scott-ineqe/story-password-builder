@@ -5,6 +5,7 @@ import { scenarios } from '@/lib/scenarios';
 import ScenarioCard from '@/components/ScenarioCard';
 import PasswordWizard from '@/components/PasswordWizard';
 import SessionHistory, { HistoryEntry } from '@/components/SessionHistory';
+import AppBreadcrumb from '@/components/AppBreadcrumb';
 
 const Index = () => {
   const [selectedScenario, setSelectedScenario] = useState<number | null>(null);
