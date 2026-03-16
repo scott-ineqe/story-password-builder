@@ -94,7 +94,7 @@ export default function Landing() {
               )}
               {result.score >= 50 && result.score < 80 && (
                 <p className="text-sm text-strength-good mt-3">
-                  Not bad, but there's room for improvement. Try the forge below!
+                  Not bad, but there's room for improvement. Try forging a stronger one below!
                 </p>
               )}
               {result.score >= 80 && (
