@@ -89,7 +89,7 @@ export default function Landing() {
               <StrengthMeter score={result.score} label={result.label} />
               {result.score < 50 && (
                 <p className="text-sm text-destructive mt-3">
-                  ⚠️ Your password is vulnerable. Consider building a stronger one below!
+                  ⚠️ Your password is vulnerable. Consider forging a stronger one below!
                 </p>
               )}
               {result.score >= 50 && result.score < 80 && (
@@ -163,7 +163,7 @@ export default function Landing() {
         {/* Footer */}
         <div className="text-center mt-10 mb-6">
           <p className="text-muted-foreground/50 text-xs">
-            Your password never leaves your browser. Everything runs locally.
+            Don't Worry! Your password never leaves your browser. Everything runs locally.
           </p>
         </div>
       </div>
