@@ -27,7 +27,91 @@ export interface AttackResult {
   type: 'dictionary' | 'brute' | 'stuffing';
 }
 
-export const additionalScenarios = [
+export const scenarios: Scenario[] = [
+  {
+    id: 'childhood-movie',
+    title: 'The Childhood Epic',
+    description: 'Turn your favorite childhood movie into an uncrackable password.',
+    icon: '🎬',
+    steps: [
+      {
+        id: 'movie',
+        prompt: "What's your favorite childhood movie?",
+        hint: 'Think of something memorable — a movie you loved as a kid.',
+        placeholder: 'e.g. Lion King',
+        type: 'text',
+        validate: (v) => v.trim().length < 2 ? 'Enter at least 2 characters' : null,
+      },
+      {
+        id: 'number',
+        prompt: 'Pick a random 2-digit number.',
+        hint: 'A number that means something to you — birthday, lucky number, jersey.',
+        placeholder: 'e.g. 88',
+        type: 'number',
+        validate: (v) => /^\d{2}$/.test(v) ? null : 'Enter exactly 2 digits',
+      },
+      {
+        id: 'shield',
+        prompt: 'Choose a special character to "shield" your password.',
+        hint: 'This is your armor. Pick one: # @ ! $ & *',
+        placeholder: 'e.g. #',
+        type: 'special',
+        validate: (v) => /^[!@#$%^&*()_+\-=\[\]{}|;:'",.<>?/\\`~]$/.test(v) ? null : 'Enter exactly 1 special character',
+      },
+      {
+        id: 'misspell',
+        prompt: 'Now intentionally misspell the movie name — make it yours.',
+        hint: 'Replace letters with numbers or mix case. e.g. Lion King → Ly0nKing',
+        placeholder: 'e.g. Ly0nKing',
+        type: 'text',
+        validate: (v) => v.trim().length < 3 ? 'Make it at least 3 characters' : null,
+      },
+    ],
+    buildPassword: (a) => `${a[3]}${a[2]}${a[1]}.`,
+    buildStory: (a) => `You took "${a[0]}", twisted it into "${a[3]}", shielded it with "${a[2]}", stamped it with ${a[1]}, and sealed it with a period.`,
+  },
+  {
+    id: 'hero-quest',
+    title: 'The Hero Quest',
+    description: 'Build a password from your personal hero and a quest.',
+    icon: '⚔️',
+    steps: [
+      {
+        id: 'hero',
+        prompt: 'Name a personal hero or someone you admire.',
+        hint: 'Real or fictional — someone whose name sticks in your mind.',
+        placeholder: 'e.g. Batman',
+        type: 'text',
+        validate: (v) => v.trim().length < 2 ? 'Enter at least 2 characters' : null,
+      },
+      {
+        id: 'action',
+        prompt: 'Pick an action verb — something powerful.',
+        hint: 'What does your hero do? Fights, Builds, Flies, Saves...',
+        placeholder: 'e.g. Saves',
+        type: 'text',
+        validate: (v) => v.trim().length < 2 ? 'Enter a verb' : null,
+      },
+      {
+        id: 'year',
+        prompt: 'Pick a meaningful year.',
+        hint: 'Birth year, graduation, a year you\'ll never forget.',
+        placeholder: 'e.g. 2003',
+        type: 'number',
+        validate: (v) => /^\d{4}$/.test(v) ? null : 'Enter a 4-digit year',
+      },
+      {
+        id: 'symbol',
+        prompt: 'Choose your battle symbol.',
+        hint: 'A special character: ! @ # $ % ^',
+        placeholder: 'e.g. !',
+        type: 'special',
+        validate: (v) => /^[!@#$%^&*()_+\-=\[\]{}|;:'",.<>?/\\`~]$/.test(v) ? null : 'Enter exactly 1 special character',
+      },
+    ],
+    buildPassword: (a) => `${a[0]}${a[1]}${a[3]}${a[2]}`,
+    buildStory: (a) => `Your hero "${a[0]}" ${a[1].toLowerCase()} the day, marked by ${a[3]} in the year ${a[2]}.`,
+  },
   {
     id: 'culinary-masterpiece',
     title: 'The Culinary Masterpiece',
