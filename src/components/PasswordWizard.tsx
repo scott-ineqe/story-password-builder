@@ -230,15 +230,25 @@ export default function PasswordWizard({ scenario, onBack, onPasswordForged }: P
         </div>
       </div>
 
-      <div className="text-center space-y-1">
-        <p className="text-xs text-muted-foreground uppercase tracking-widest">
-          {isComposePhase
-            ? `Final Step`
-            : `Step ${currentStep + 1} of ${totalSteps}`}
-        </p>
-        <h2 className="text-lg font-display text-primary">
-          {isComposePhase ? 'Forge Your Password' : scenario.title}
-        </h2>
+      <div className="flex flex-col-reverse sm:flex-row gap-3 mt-6">
+        {(currentStep > 0 || isComposePhase) && (
+          <Button variant="outline" onClick={handlePrev} className="flex-1 h-auto whitespace-normal py-3 sm:py-2">
+            <ArrowLeft className="w-4 h-4 mr-2 shrink-0" /> Back
+          </Button>
+        )}
+        {isComposePhase ? (
+          <Button onClick={handleForge} className="flex-1 h-auto whitespace-normal py-3 sm:py-2" disabled={!canForge}>
+            Forge Password <Sparkles className="w-4 h-4 ml-2 shrink-0" />
+          </Button>
+        ) : (
+          <Button onClick={handleNext} className="flex-1 h-auto whitespace-normal py-3 sm:py-2">
+            {currentStep < scenario.steps.length - 1 ? (
+              <>Next <ArrowRight className="w-4 h-4 ml-2 shrink-0" /></>
+            ) : (
+              <>Build Password <ArrowRight className="w-4 h-4 ml-2 shrink-0" /></>
+            )}
+          </Button>
+        )}
       </div>
 
       <AnimatePresence mode="wait">
