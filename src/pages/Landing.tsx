@@ -245,9 +245,12 @@ export default function Landing() {
         </motion.div>
 
         {/* CTA */}
-        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 }} className="text-center mb-20 px-2 sm:px-0">
-          <Button size="l onClick={() => navigate('/forge')} className="bg-primary text-primary-foreground hover:bg-primary/90 text-sm sm:text-lg px-6 sm:px-10 py-6 sm:py-8 rounded-xl gold-glow font-bold uppercase tracking-wider sm:tracking-widest transition-all hover:scale-105 h-auto whitespace-normal w-full sm:w-auto flex flex-col sm:flex-row items-center justify-center gap-3 max-w-[280px] sm:max-w-none mx-auto" >
-            <span className="text-center leading-tight">Forge a secure password</span> 
+        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 }} className="text-center mb-20 px-4 sm:px-0">
+          <Button 
+            onClick={() => navigate('/forge')} 
+            className="bg-primary text-primary-foreground hover:bg-primary/90 text-sm sm:text-lg px-6 sm:px-10 py-6 sm:py-8 rounded-xl gold-glow font-bold uppercase tracking-wider sm:tracking-widest transition-all hover:scale-105 h-auto !whitespace-normal w-full sm:w-auto max-w-[320px] sm:max-w-none mx-auto flex flex-row items-center justify-center gap-2 sm:gap-3"
+          >
+            <span className="leading-tight text-center">Forge a secure password</span> 
             <ArrowRight className="w-5 h-5 sm:w-6 sm:h-6 shrink-0" />
           </Button>
           <p className="text-muted-foreground/80 text-sm mt-5 italic">Build unforgettable, complex passwords using storytelling.</p>
