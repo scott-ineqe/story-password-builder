@@ -264,7 +264,7 @@ export default function Landing() {
         </motion.div>
 
         {/* Why Security Matters Section */}
-        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.5 }}>
+        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.5 }} className="mb-20">
           <h2 className="text-2xl sm:text-3xl font-display text-foreground text-center mb-10 gold-text-glow font-bold uppercase tracking-wider">Why Security Matters</h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
             {securityContent.map((item, i) => (
