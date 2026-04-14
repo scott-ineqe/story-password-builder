@@ -46,7 +46,7 @@ const twoFactorMethods = [
     icon: MessageSquare,
     color: 'text-amber-400',
     bg: 'bg-amber-500/10',
-    border: 'border-amber-500/20'
+    border: 'border-amber-500/30'
   },
   {
     type: 'Authenticator Apps',
@@ -57,7 +57,7 @@ const twoFactorMethods = [
     icon: Smartphone,
     color: 'text-emerald-400',
     bg: 'bg-emerald-500/10',
-    border: 'border-emerald-500/20'
+    border: 'border-emerald-500/30'
   },
   {
     type: 'Security Keys',
@@ -68,7 +68,7 @@ const twoFactorMethods = [
     icon: Key,
     color: 'text-primary',
     bg: 'bg-primary/10',
-    border: 'border-primary/20'
+    border: 'border-primary/30'
   },
 ];
 
@@ -95,30 +95,30 @@ export default function Landing() {
 
   return (
     <div className="min-h-screen palace-gradient flex flex-col items-center p-4 sm:p-8">
-      <div className="fixed top-0 left-1/2 -translate-x-1/2 w-[600px] h-[600px] bg-primary/15 rounded-full blur-[150px] pointer-events-none" />
+      <div className="fixed top-0 left-1/2 -translate-x-1/2 w-[600px] h-[600px] bg-primary/10 rounded-full blur-[150px] pointer-events-none" />
 
       <div className="w-full max-w-2xl relative z-10">
         {/* Header */}
         <motion.div initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }} className="text-center mb-10 mt-8">
-          <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-primary/30 border border-primary/40 mb-4 gold-glow">
+          <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-primary/20 backdrop-blur-md border border-primary/40 mb-4 gold-glow">
             <KeyRound className="w-8 h-8 text-primary" />
           </div>
-          <h1 className="text-3xl sm:text-4xl font-display text-foreground gold-text-glow font-bold uppercase tracking-tight">Memory Palace</h1>
-          <p className="text-muted-foreground mt-2 text-sm sm:text-base flex items-center justify-center gap-1.5 font-medium">
-            <Shield className="w-4 h-4" />
+          <h1 className="text-4xl sm:text-5xl font-display text-foreground gold-text-glow font-bold uppercase tracking-tight">Memory Palace</h1>
+          <p className="text-muted-foreground mt-3 text-base sm:text-lg flex items-center justify-center gap-2 font-medium">
+            <Shield className="w-5 h-5" />
             Forge uncrackable keys for your digital kingdom.
           </p>
         </motion.div>
 
         {/* Password Checker */}
-        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.15 }} className="bg-card border border-border rounded-2xl p-6 sm:p-8 mb-6 shadow-xl">
-          <h2 className="text-lg sm:text-xl font-display text-foreground mb-4 font-bold">Rate Your Current Password</h2>
+        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.15 }} className="bg-card/40 backdrop-blur-xl border border-white/10 rounded-2xl p-6 sm:p-8 mb-6 shadow-2xl">
+          <h2 className="text-xl sm:text-2xl font-display text-foreground mb-4 font-bold">Rate Your Current Password</h2>
           <Input
             type="password"
             placeholder="Enter your current password…"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            className="bg-secondary border-border text-foreground placeholder:text-muted-foreground/60 mb-6 text-lg font-mono"
+            className="bg-secondary/60 border-white/10 text-foreground placeholder:text-muted-foreground/60 mb-6 text-xl p-6 font-mono shadow-inner"
           />
 
           <AnimatePresence mode="wait">
@@ -131,49 +131,49 @@ export default function Landing() {
                 className="space-y-4"
               >
                 <div className="flex items-center gap-2 text-muted-foreground">
-                  <Info className="w-4 h-4" />
-                  <p className="text-sm">Start typing to see a real-time security audit.</p>
+                  <Info className="w-5 h-5" />
+                  <p className="text-base">Start typing to see a real-time security audit.</p>
                 </div>
                 
-                <div className="grid grid-cols-1 gap-3">
-                  <p className="text-xs text-muted-foreground uppercase tracking-widest font-bold opacity-80">What we check</p>
+                <div className="grid grid-cols-1 gap-4">
+                  <p className="text-sm text-muted-foreground uppercase tracking-widest font-bold opacity-80">What we check</p>
                   
-                  <div className="p-4 rounded-xl border bg-secondary/20 border-border/50">
-                     <div className="flex items-center gap-2 mb-1">
-                        <ShieldAlert className="w-4 h-4 text-primary" />
-                        <span className="font-display text-sm font-bold uppercase text-foreground">Breach Check</span>
+                  <div className="p-5 rounded-xl border bg-secondary/40 backdrop-blur-md border-white/5">
+                     <div className="flex items-center gap-2 mb-2">
+                        <ShieldAlert className="w-5 h-5 text-primary" />
+                        <span className="font-display text-base font-bold uppercase text-foreground">Breach Check</span>
                       </div>
-                      <p className="text-xs text-muted-foreground leading-relaxed">
+                      <p className="text-sm text-muted-foreground leading-relaxed">
                         We securely check known databases to see if your password has been exposed in previous data leaks.
                       </p>
                   </div>
                   
-                  <div className="p-4 rounded-xl border bg-secondary/20 border-border/50">
-                     <div className="flex items-center gap-2 mb-1">
-                        <Search className="w-4 h-4 text-primary" />
-                        <span className="font-display text-sm font-bold uppercase text-foreground">Dictionary Attack</span>
+                  <div className="p-5 rounded-xl border bg-secondary/40 backdrop-blur-md border-white/5">
+                     <div className="flex items-center gap-2 mb-2">
+                        <Search className="w-5 h-5 text-primary" />
+                        <span className="font-display text-base font-bold uppercase text-foreground">Dictionary Attack</span>
                       </div>
-                      <p className="text-xs text-muted-foreground leading-relaxed">
+                      <p className="text-sm text-muted-foreground leading-relaxed">
                         We analyze if your password uses common words or patterns that are easy for hackers to guess.
                       </p>
                   </div>
 
-                  <div className="p-4 rounded-xl border bg-secondary/20 border-border/50">
-                     <div className="flex items-center gap-2 mb-1">
-                        <Timer className="w-4 h-4 text-primary" />
-                        <span className="font-display text-sm font-bold uppercase text-foreground">Brute Force Attack</span>
+                  <div className="p-5 rounded-xl border bg-secondary/40 backdrop-blur-md border-white/5">
+                     <div className="flex items-center gap-2 mb-2">
+                        <Timer className="w-5 h-5 text-primary" />
+                        <span className="font-display text-base font-bold uppercase text-foreground">Brute Force Attack</span>
                       </div>
-                      <p className="text-xs text-muted-foreground leading-relaxed">
+                      <p className="text-sm text-muted-foreground leading-relaxed">
                         We estimate how long it would take modern hardware to crack your password by trying every combination.
                       </p>
                   </div>
 
-                  <div className="p-4 rounded-xl border bg-secondary/20 border-border/50">
-                     <div className="flex items-center gap-2 mb-1">
-                        <Database className="w-4 h-4 text-primary" />
-                        <span className="font-display text-sm font-bold uppercase text-foreground">Credential Stuffing</span>
+                  <div className="p-5 rounded-xl border bg-secondary/40 backdrop-blur-md border-white/5">
+                     <div className="flex items-center gap-2 mb-2">
+                        <Database className="w-5 h-5 text-primary" />
+                        <span className="font-display text-base font-bold uppercase text-foreground">Credential Stuffing</span>
                       </div>
-                      <p className="text-xs text-muted-foreground leading-relaxed">
+                      <p className="text-sm text-muted-foreground leading-relaxed">
                         We evaluate the risk of your password being used in automated attacks across multiple websites.
                       </p>
                   </div>
@@ -188,27 +188,27 @@ export default function Landing() {
                 className="space-y-6 overflow-hidden"
               >
                 <div>
-                  <p className="text-xs text-muted-foreground uppercase tracking-widest mb-2 font-bold opacity-80">Current Strength</p>
+                  <p className="text-sm text-muted-foreground uppercase tracking-widest mb-3 font-bold opacity-80">Current Strength</p>
                   <StrengthMeter score={scoreResult.score} label={scoreResult.label} />
                 </div>
 
-                <div className="grid grid-cols-1 gap-3">
-                  <p className="text-xs text-muted-foreground uppercase tracking-widest font-bold mt-2 opacity-80">Security Audit</p>
+                <div className="grid grid-cols-1 gap-4">
+                  <p className="text-sm text-muted-foreground uppercase tracking-widest font-bold mt-2 opacity-80">Security Audit</p>
                   
                   {/* Breach Check Card */}
                   <motion.div
-                    className={`p-4 rounded-xl border transition-colors ${pwnedCount && pwnedCount > 0 ? 'bg-destructive/10 border-destructive/20' : 'bg-emerald-500/10 border-emerald-500/20'}`}
+                    className={`p-5 rounded-xl border transition-colors backdrop-blur-md ${pwnedCount && pwnedCount > 0 ? 'bg-destructive/15 border-destructive/30' : 'bg-emerald-500/10 border-emerald-500/30'}`}
                   >
-                    <div className="flex justify-between items-start mb-1">
+                    <div className="flex justify-between items-start mb-2">
                       <div className="flex items-center gap-2">
-                        <ShieldAlert className="w-4 h-4 text-primary" />
-                        <span className="font-display text-sm font-bold uppercase">Breach Check</span>
+                        <ShieldAlert className="w-5 h-5 text-primary" />
+                        <span className="font-display text-base font-bold uppercase">Breach Check</span>
                       </div>
-                      <span className={`text-xs font-mono font-bold px-2 py-0.5 rounded-full ${pwnedCount && pwnedCount > 0 ? 'bg-destructive/20 text-destructive' : 'bg-emerald-500/20 text-emerald-400'}`}>
+                      <span className={`text-sm font-mono font-bold px-3 py-1 rounded-full ${pwnedCount && pwnedCount > 0 ? 'bg-destructive/30 text-white' : 'bg-emerald-500/30 text-emerald-300'}`}>
                         {pwnedCount === null ? 'Scanning...' : pwnedCount > 0 ? 'COMPROMISED' : 'CLEAN'}
                       </span>
                     </div>
-                    <p className="text-xs text-muted-foreground leading-relaxed">
+                    <p className="text-sm text-muted-foreground leading-relaxed">
                       {pwnedCount === null ? 'Checking databases for matches...' : 
                        pwnedCount > 0 ? `Vulnerable! This pattern appeared in ${pwnedCount.toLocaleString()} known data leaks. Change it immediately.` : 
                        'Great! This password pattern has not been found in any known public leaks.'}
@@ -222,20 +222,20 @@ export default function Landing() {
                       initial={{ opacity: 0, x: -10 }}
                       animate={{ opacity: 1, x: 0 }}
                       transition={{ delay: i * 0.1 }}
-                      className={`p-4 rounded-xl border ${sim.isVulnerable ? 'bg-destructive/10 border-destructive/20' : 'bg-emerald-500/10 border-emerald-500/20'}`}
+                      className={`p-5 rounded-xl border backdrop-blur-md ${sim.isVulnerable ? 'bg-destructive/15 border-destructive/30' : 'bg-emerald-500/10 border-emerald-500/30'}`}
                     >
-                      <div className="flex justify-between items-start mb-1">
+                      <div className="flex justify-between items-start mb-2">
                         <div className="flex items-center gap-2">
-                          {sim.type === 'dictionary' && <Search className="w-4 h-4 text-primary" />}
-                          {sim.type === 'brute' && <Timer className="w-4 h-4 text-primary" />}
-                          {sim.type === 'stuffing' && <Database className="w-4 h-4 text-primary" />}
-                          <span className="font-display text-sm font-bold uppercase">{sim.name}</span>
+                          {sim.type === 'dictionary' && <Search className="w-5 h-5 text-primary" />}
+                          {sim.type === 'brute' && <Timer className="w-5 h-5 text-primary" />}
+                          {sim.type === 'stuffing' && <Database className="w-5 h-5 text-primary" />}
+                          <span className="font-display text-base font-bold uppercase">{sim.name}</span>
                         </div>
-                        <span className={`text-xs font-mono font-bold px-2 py-0.5 rounded-full ${sim.isVulnerable ? 'bg-destructive/20 text-destructive' : 'bg-emerald-500/20 text-emerald-400'}`}>
+                        <span className={`text-sm font-mono font-bold px-3 py-1 rounded-full ${sim.isVulnerable ? 'bg-destructive/30 text-white' : 'bg-emerald-500/30 text-emerald-300'}`}>
                           {sim.timeLabel}
                         </span>
                       </div>
-                      <p className="text-xs text-muted-foreground leading-relaxed font-medium">{sim.description}</p>
+                      <p className="text-sm text-muted-foreground leading-relaxed font-medium">{sim.description}</p>
                     </motion.div>
                   ))}
                 </div>
@@ -246,86 +246,86 @@ export default function Landing() {
 
         {/* CTA */}
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 }} className="text-center mb-20">
-          <Button size="lg" onClick={() => navigate('/forge')} className="bg-primary text-primary-foreground hover:bg-primary/90 text-base px-8 py-6 rounded-xl gold-glow font-bold uppercase tracking-widest transition-all hover:scale-105">
-            Forge a secure password <ArrowRight className="w-5 h-5 ml-2" />
+          <Button size="lg" onClick={() => navigate('/forge')} className="bg-primary text-primary-foreground hover:bg-primary/90 text-lg px-10 py-8 rounded-xl gold-glow font-bold uppercase tracking-widest transition-all hover:scale-105">
+            Forge a secure password <ArrowRight className="w-6 h-6 ml-3" />
           </Button>
-          <p className="text-muted-foreground/70 text-xs mt-4 italic">Build unforgettable, complex passwords using storytelling.</p>
+          <p className="text-muted-foreground/80 text-sm mt-5 italic">Build unforgettable, complex passwords using storytelling.</p>
         </motion.div>
 
         {/* 2FA Education Section */}
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.4 }} className="mb-20">
           <div className="text-center mb-10">
-            <h2 className="text-2xl sm:text-3xl font-display text-foreground font-black gold-text-glow mb-3">Add a Second Lock to Your Account</h2>
-            <p className="text-muted-foreground max-w-lg mx-auto leading-relaxed">
+            <h2 className="text-3xl sm:text-4xl font-display text-foreground font-black gold-text-glow mb-4">Add a Second Lock to Your Account</h2>
+            <p className="text-muted-foreground text-lg max-w-lg mx-auto leading-relaxed">
               Even a strong password isn't always enough. <span className="text-primary font-bold">Two-Factor Authentication (2FA)</span> adds a second step—so even if someone gets your password, they still can't get in.
             </p>
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-12">
-            <div className="bg-card border border-border rounded-2xl p-6 shadow-md">
-              <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center mb-4 border border-primary/20">
-                <Fingerprint className="w-5 h-5 text-primary" />
+            <div className="bg-card/40 backdrop-blur-xl border border-white/10 rounded-2xl p-8 shadow-2xl">
+              <div className="w-12 h-12 rounded-full bg-primary/20 flex items-center justify-center mb-5 border border-primary/30">
+                <Fingerprint className="w-6 h-6 text-primary" />
               </div>
-              <h3 className="font-bold text-lg mb-2">1. Something You Know</h3>
-              <p className="text-sm text-muted-foreground">Your Memory Palace password or a secret phrase.</p>
+              <h3 className="font-bold text-xl mb-3">1. Something You Know</h3>
+              <p className="text-base text-muted-foreground">Your Memory Palace password or a secret phrase.</p>
             </div>
-            <div className="bg-card border border-border rounded-2xl p-6 shadow-md">
-              <div className="w-10 h-10 rounded-full bg-emerald-500/10 flex items-center justify-center mb-4 border border-emerald-500/20">
-                <Smartphone className="w-5 h-5 text-emerald-400" />
+            <div className="bg-card/40 backdrop-blur-xl border border-white/10 rounded-2xl p-8 shadow-2xl">
+              <div className="w-12 h-12 rounded-full bg-emerald-500/20 flex items-center justify-center mb-5 border border-emerald-500/30">
+                <Smartphone className="w-6 h-6 text-emerald-400" />
               </div>
-              <h3 className="font-bold text-lg mb-2">2. Something You Have</h3>
-              <p className="text-sm text-muted-foreground">A device you own (like your phone or a security key).</p>
+              <h3 className="font-bold text-xl mb-3">2. Something You Have</h3>
+              <p className="text-base text-muted-foreground">A device you own (like your phone or a security key).</p>
             </div>
           </div>
 
-          <div className="bg-secondary/30 rounded-3xl p-6 mb-12 border border-border/50 text-center">
-             <p className="text-foreground font-bold flex items-center justify-center gap-2">
-                <ShieldCheck className="text-emerald-400 w-5 h-5" />
-                Think of it like: <span className="text-primary">Password = Your Key</span> and <span className="text-emerald-400">2FA = A Second Lock</span>
+          <div className="bg-secondary/40 backdrop-blur-md rounded-3xl p-8 mb-12 border border-white/10 text-center shadow-lg">
+             <p className="text-foreground text-lg font-bold flex flex-col sm:flex-row items-center justify-center gap-3">
+                <ShieldCheck className="text-emerald-400 w-6 h-6" />
+                <span>Think of it like: <span className="text-primary">Password = Your Key</span> and <span className="text-emerald-400">2FA = A Second Lock</span></span>
              </p>
           </div>
 
           <div className="space-y-6">
-            <h3 className="text-xs text-muted-foreground uppercase tracking-[0.2em] font-bold text-center">Compare Your Options</h3>
-            <div className="grid grid-cols-1 gap-4">
+            <h3 className="text-sm text-muted-foreground uppercase tracking-[0.2em] font-bold text-center">Compare Your Options</h3>
+            <div className="grid grid-cols-1 gap-5">
               {twoFactorMethods.map((m, i) => (
-                <motion.div key={i} className={`bg-card border ${m.border} rounded-2xl p-6 transition-all hover:bg-secondary/20`}>
-                  <div className="flex items-center justify-between mb-4">
-                    <div className="flex items-center gap-3">
-                      <div className={`p-2 rounded-lg ${m.bg}`}>
-                        <m.icon className={`w-5 h-5 ${m.color}`} />
+                <motion.div key={i} className={`bg-card/40 backdrop-blur-xl border ${m.border} rounded-2xl p-8 transition-all hover:bg-secondary/50 shadow-lg`}>
+                  <div className="flex items-center justify-between mb-6">
+                    <div className="flex items-center gap-4">
+                      <div className={`p-3 rounded-xl ${m.bg}`}>
+                        <m.icon className={`w-6 h-6 ${m.color}`} />
                       </div>
                       <div>
-                        <h4 className="font-display font-black text-foreground uppercase tracking-tight leading-none">{m.type}</h4>
-                        <p className="text-[10px] text-muted-foreground mt-1 font-bold uppercase tracking-widest">{m.level} Security</p>
+                        <h4 className="font-display text-xl font-black text-foreground uppercase tracking-tight leading-none">{m.type}</h4>
+                        <p className="text-xs text-muted-foreground mt-2 font-bold uppercase tracking-widest">{m.level} Security</p>
                       </div>
                     </div>
                   </div>
                   
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 text-sm">
-                    <div className="space-y-2">
-                      <span className="text-emerald-400 font-bold uppercase tracking-widest text-[10px] flex items-center gap-1.5"><ThumbsUp className="w-3 h-3" /> Pros</span>
-                      <ul className="space-y-1">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-8 text-base">
+                    <div className="space-y-3">
+                      <span className="text-emerald-400 font-bold uppercase tracking-widest text-xs flex items-center gap-2"><ThumbsUp className="w-4 h-4" /> Pros</span>
+                      <ul className="space-y-2">
                         {m.pros.map((p, idx) => (
-                          <li key={idx} className="text-muted-foreground text-xs flex items-start gap-2">
-                            <span className="text-emerald-500">•</span> {p}
+                          <li key={idx} className="text-muted-foreground text-sm flex items-start gap-2">
+                            <span className="text-emerald-500 font-bold">•</span> {p}
                           </li>
                         ))}
                       </ul>
                     </div>
-                    <div className="space-y-2">
-                      <span className="text-destructive font-bold uppercase tracking-widest text-[10px] flex items-center gap-1.5"><AlertCircle className="w-3 h-3" /> Cons</span>
-                      <ul className="space-y-1">
+                    <div className="space-y-3">
+                      <span className="text-destructive font-bold uppercase tracking-widest text-xs flex items-center gap-2"><AlertCircle className="w-4 h-4" /> Cons</span>
+                      <ul className="space-y-2">
                         {m.cons.map((c, idx) => (
-                          <li key={idx} className="text-muted-foreground text-xs flex items-start gap-2">
-                            <span className="text-destructive">•</span> {c}
+                          <li key={idx} className="text-muted-foreground text-sm flex items-start gap-2">
+                            <span className="text-destructive font-bold">•</span> {c}
                           </li>
                         ))}
                       </ul>
                     </div>
                   </div>
                   {m.description && (
-                    <p className="mt-4 text-[11px] text-muted-foreground bg-secondary/30 px-3 py-1.5 rounded-lg border border-border/50 inline-block font-medium">
+                    <p className="mt-5 text-sm text-muted-foreground bg-secondary/60 backdrop-blur-md px-4 py-2 rounded-xl border border-white/5 inline-block font-medium">
                       {m.description}
                     </p>
                   )}
@@ -334,39 +334,73 @@ export default function Landing() {
             </div>
           </div>
 
-          <div className="mt-12 bg-primary/5 border border-primary/20 rounded-2xl p-6 text-center shadow-lg">
-            <h4 className="font-display font-bold text-primary mb-2 flex items-center justify-center gap-2 uppercase tracking-widest">
-              <CheckCircle2 className="w-4 h-4" /> Recommended Next Steps
+          <div className="mt-12 bg-primary/10 backdrop-blur-xl border border-primary/30 rounded-2xl p-8 text-center shadow-2xl">
+            <h4 className="font-display text-lg font-bold text-primary mb-3 flex items-center justify-center gap-2 uppercase tracking-widest">
+              <CheckCircle2 className="w-5 h-5" /> Recommended Next Steps
             </h4>
-            <p className="text-sm text-muted-foreground leading-relaxed">
+            <p className="text-base text-muted-foreground leading-relaxed">
               Best balance: <span className="text-foreground font-bold">Authenticator Apps</span>. <br />
               Top security: <span className="text-foreground font-bold">Security Keys</span>. <br />
-              <span className="block mt-4 text-xs font-bold text-foreground">👉 Turn on 2FA for your email first (it's your most important account!)</span>
+              <span className="block mt-5 text-sm font-bold text-foreground bg-primary/20 inline-block px-4 py-2 rounded-lg">👉 Turn on 2FA for your email first (it's your most important account!)</span>
             </p>
           </div>
         </motion.div>
 
+        {/* Interactive Question */}
+        <motion.div initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} className="mb-20 bg-card/40 backdrop-blur-xl border border-white/10 rounded-3xl p-10 text-center shadow-2xl relative overflow-hidden">
+          <div className="absolute top-0 right-0 w-48 h-48 bg-primary/10 rounded-full -mr-20 -mt-20 blur-3xl" />
+          <h3 className="text-2xl font-display font-black mb-8 uppercase tracking-tight">Do you use 2FA anywhere right now?</h3>
+          <div className="flex flex-wrap justify-center gap-5">
+            <Button 
+              variant={userHas2FA === 'yes' ? 'default' : 'outline'} 
+              onClick={() => setUserHas2FA('yes')}
+              className="rounded-xl px-10 py-6 text-lg font-bold"
+            >
+              Yes, I do!
+            </Button>
+            <Button 
+              variant={userHas2FA === 'no' ? 'destructive' : 'outline'} 
+              onClick={() => setUserHas2FA('no')}
+              className="rounded-xl px-10 py-6 text-lg font-bold border-white/20 hover:bg-secondary/60"
+            >
+              Not yet.
+            </Button>
+          </div>
+          <AnimatePresence>
+            {userHas2FA === 'yes' && (
+              <motion.p initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="text-primary text-lg font-bold mt-8 flex items-center justify-center gap-2">
+                <ThumbsUp className="w-5 h-5" /> Awesome! You're ahead of 90% of people online.
+              </motion.p>
+            )}
+            {userHas2FA === 'no' && (
+              <motion.p initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="text-destructive text-lg font-bold mt-8">
+                Let's fix that! It only takes 2 minutes to protect your life.
+              </motion.p>
+            )}
+          </AnimatePresence>
+        </motion.div>
+
         {/* Why Security Matters Section */}
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.5 }}>
-          <h2 className="text-xl sm:text-2xl font-display text-foreground text-center mb-8 gold-text-glow font-bold uppercase tracking-wider">Why Security Matters</h2>
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <h2 className="text-2xl sm:text-3xl font-display text-foreground text-center mb-10 gold-text-glow font-bold uppercase tracking-wider">Why Security Matters</h2>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
             {securityContent.map((item, i) => (
-              <motion.div key={i} className="bg-card border border-border rounded-xl p-5 sm:p-6 shadow-md hover:border-primary/30 transition-all group">
-                <div className="flex items-center gap-3 mb-3">
-                  <div className="w-9 h-9 rounded-lg bg-destructive/10 border border-destructive/20 flex items-center justify-center shrink-0 group-hover:bg-destructive/20 transition-colors">
-                    <item.icon className="w-4 h-4 text-destructive" />
+              <motion.div key={i} className="bg-card/40 backdrop-blur-xl border border-white/10 rounded-2xl p-6 sm:p-8 shadow-2xl hover:bg-card/60 hover:border-primary/40 transition-all group">
+                <div className="flex items-center gap-4 mb-4">
+                  <div className="w-12 h-12 rounded-xl bg-destructive/15 border border-destructive/30 flex items-center justify-center shrink-0 group-hover:bg-destructive/25 transition-colors">
+                    <item.icon className="w-6 h-6 text-destructive" />
                   </div>
-                  <h3 className="font-display text-sm sm:text-base text-foreground font-black tracking-tight uppercase">{item.title}</h3>
+                  <h3 className="font-display text-base sm:text-lg text-foreground font-black tracking-tight uppercase">{item.title}</h3>
                 </div>
-                <p className="text-muted-foreground text-xs leading-relaxed font-medium">{item.description}</p>
+                <p className="text-muted-foreground text-sm leading-relaxed font-medium">{item.description}</p>
               </motion.div>
             ))}
           </div>
         </motion.div>
 
         {/* Footer */}
-        <footer className="text-center mt-20 mb-10 border-t border-border pt-10">
-          <p className="text-muted-foreground/40 text-[10px] max-w-sm mx-auto leading-relaxed uppercase tracking-[0.2em] font-bold">
+        <footer className="text-center mt-24 mb-10 border-t border-white/10 pt-10">
+          <p className="text-muted-foreground/60 text-xs max-w-sm mx-auto leading-relaxed uppercase tracking-[0.2em] font-bold">
             Computed locally on your device • Zero data collected • Privacy first always
           </p>
         </footer>
