@@ -7,7 +7,7 @@ import {
   KeyRound, Shield, AlertTriangle, Lock, Eye, 
   Globe, ArrowRight, Timer, Database, Search, 
   ShieldAlert, Smartphone, Key, Fingerprint, ShieldCheck,
-  CheckCircle2, AlertCircle, ThumbsUp, MessageSquare
+  CheckCircle2, AlertCircle, ThumbsUp, MessageSquare, Info
 } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
@@ -121,9 +121,72 @@ export default function Landing() {
             className="bg-secondary border-border text-foreground placeholder:text-muted-foreground/60 mb-6 text-lg font-mono"
           />
 
-          <AnimatePresence>
-            {scoreResult && (
-              <motion.div initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: 'auto' }} exit={{ opacity: 0, height: 0 }} className="space-y-6 overflow-hidden">
+          <AnimatePresence mode="wait">
+            {!password ? (
+              <motion.div
+                key="placeholder"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                className="space-y-4"
+              >
+                <div className="flex items-center gap-2 text-muted-foreground">
+                  <Info className="w-4 h-4" />
+                  <p className="text-sm">Start typing to see a real-time security audit.</p>
+                </div>
+                
+                <div className="grid grid-cols-1 gap-3">
+                  <p className="text-xs text-muted-foreground uppercase tracking-widest font-bold opacity-80">What we check</p>
+                  
+                  <div className="p-4 rounded-xl border bg-secondary/20 border-border/50">
+                     <div className="flex items-center gap-2 mb-1">
+                        <ShieldAlert className="w-4 h-4 text-primary" />
+                        <span className="font-display text-sm font-bold uppercase text-foreground">Breach Check</span>
+                      </div>
+                      <p className="text-xs text-muted-foreground leading-relaxed">
+                        We securely check known databases to see if your password has been exposed in previous data leaks.
+                      </p>
+                  </div>
+                  
+                  <div className="p-4 rounded-xl border bg-secondary/20 border-border/50">
+                     <div className="flex items-center gap-2 mb-1">
+                        <Search className="w-4 h-4 text-primary" />
+                        <span className="font-display text-sm font-bold uppercase text-foreground">Dictionary Attack</span>
+                      </div>
+                      <p className="text-xs text-muted-foreground leading-relaxed">
+                        We analyze if your password uses common words or patterns that are easy for hackers to guess.
+                      </p>
+                  </div>
+
+                  <div className="p-4 rounded-xl border bg-secondary/20 border-border/50">
+                     <div className="flex items-center gap-2 mb-1">
+                        <Timer className="w-4 h-4 text-primary" />
+                        <span className="font-display text-sm font-bold uppercase text-foreground">Brute Force Attack</span>
+                      </div>
+                      <p className="text-xs text-muted-foreground leading-relaxed">
+                        We estimate how long it would take modern hardware to crack your password by trying every combination.
+                      </p>
+                  </div>
+
+                  <div className="p-4 rounded-xl border bg-secondary/20 border-border/50">
+                     <div className="flex items-center gap-2 mb-1">
+                        <Database className="w-4 h-4 text-primary" />
+                        <span className="font-display text-sm font-bold uppercase text-foreground">Credential Stuffing</span>
+                      </div>
+                      <p className="text-xs text-muted-foreground leading-relaxed">
+                        We evaluate the risk of your password being used in automated attacks across multiple websites.
+                      </p>
+                  </div>
+                </div>
+              </motion.div>
+            ) : scoreResult && (
+              <motion.div 
+                key="results"
+                initial={{ opacity: 0, height: 0 }} 
+                animate={{ opacity: 1, height: 'auto' }} 
+                exit={{ opacity: 0, height: 0 }} 
+                className="space-y-6 overflow-hidden"
+              >
                 <div>
                   <p className="text-xs text-muted-foreground uppercase tracking-widest mb-2 font-bold opacity-80">Current Strength</p>
                   <StrengthMeter score={scoreResult.score} label={scoreResult.label} />
