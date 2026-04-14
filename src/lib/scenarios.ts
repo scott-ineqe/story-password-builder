@@ -124,21 +124,21 @@ export function scorePassword(password: string): {
   const tips: string[] = [];
 
   if (password.length >= 8) score += 20;
-  else tips.push('Make it at least 8 characters');
+  else tips.push('At least 8 characters');
   if (password.length >= 12) score += 15;
   if (password.length >= 16) score += 10;
 
   if (/[a-z]/.test(password) && /[A-Z]/.test(password)) score += 15;
-  else tips.push('Mix uppercase and lowercase');
+  else tips.push('Uppercase & Lowercase');
 
   if (/\d/.test(password)) score += 15;
-  else tips.push('Add some numbers');
+  else tips.push('Numbers included');
 
   if (/[!@#$%^&*()_+\-=\[\]{}|;:'",.<>?/\\`~]/.test(password)) score += 15;
-  else tips.push('Include a special character');
+  else tips.push('Special characters');
 
   if (!/(.)\1{2,}/.test(password)) score += 10;
-  else tips.push('Avoid repeating characters');
+  else tips.push('No repeated patterns');
 
   const common = ['password', '123456', 'qwerty', 'abc123', 'letmein', 'admin', 'welcome'];
   if (!common.some(c => password.toLowerCase().includes(c))) score += 10;
@@ -160,7 +160,6 @@ export function scoreCommonPassword(password: string) {
   return scorePassword(password);
 }
 
-// "Have I Been Pwned" API Check (K-Anonymity)
 export async function checkBreachedCount(password: string): Promise<number> {
   try {
     const encoder = new TextEncoder();
@@ -168,25 +167,18 @@ export async function checkBreachedCount(password: string): Promise<number> {
     const hashBuffer = await crypto.subtle.digest('SHA-1', data);
     const hashArray = Array.from(new Uint8Array(hashBuffer));
     const hashHex = hashArray.map(b => b.toString(16).padStart(2, '0')).join('').toUpperCase();
-
     const prefix = hashHex.slice(0, 5);
     const suffix = hashHex.slice(5);
-
     const response = await fetch(`https://api.pwnedpasswords.com/range/${prefix}`);
     if (!response.ok) return 0;
-
     const text = await response.text();
     const lines = text.split('\n');
-    
     for (const line of lines) {
       const [lineSuffix, count] = line.split(':');
-      if (lineSuffix === suffix) {
-        return parseInt(count.trim(), 10);
-      }
+      if (lineSuffix === suffix) return parseInt(count.trim(), 10);
     }
     return 0;
   } catch (error) {
-    console.error('Breach check failed:', error);
     return 0;
   }
 }
@@ -198,9 +190,7 @@ export function simulateAttacks(password: string): AttackResult[] {
   const dictionaryAttack: AttackResult = {
     name: 'Dictionary Attack',
     timeLabel: isCommon ? 'Instant' : '> 1 month',
-    description: isCommon 
-      ? 'Cracked instantly! Your password was found in a common dictionary.'
-      : 'Secure. Not found in standard dictionary lists.',
+    description: isCommon ? 'Cracked instantly by list matching.' : 'Not found in common dictionaries.',
     isVulnerable: isCommon,
     type: 'dictionary'
   };
@@ -216,18 +206,16 @@ export function simulateAttacks(password: string): AttackResult[] {
 
   const formatTime = (s: number) => {
     if (s < 1) return 'Under 1 sec';
-    if (s < 3600) return `${Math.floor(s / 60)} mins`;
-    if (s < 86400) return `${Math.floor(s / 3600)} hours`;
-    if (s < 31536000) return `${Math.floor(s / 86400)} days`;
-    return `${Math.floor(s / 31536000)} years`;
+    if (s < 3600) return `${Math.floor(s / 60)}m`;
+    if (s < 86400) return `${Math.floor(s / 3600)}h`;
+    if (s < 31536000) return `${Math.floor(s / 86400)}d`;
+    return `${Math.floor(s / 31536000)}y`;
   };
 
   const bruteForceAttack: AttackResult = {
-    name: 'Brute Force Attack',
+    name: 'Brute Force',
     timeLabel: formatTime(secondsToCrack),
-    description: secondsToCrack < 3600 
-      ? 'Vulnerable to modern high-speed cracking hardware.'
-      : 'Mathematically strong against guessing attacks.',
+    description: secondsToCrack < 3600 ? 'Vulnerable to high-speed guessing.' : 'Strong mathematical defense.',
     isVulnerable: secondsToCrack < 3600,
     type: 'brute'
   };
@@ -236,9 +224,7 @@ export function simulateAttacks(password: string): AttackResult[] {
   const stuffingAttack: AttackResult = {
     name: 'Credential Stuffing',
     timeLabel: isSimple ? 'High Risk' : 'Low Risk',
-    description: isSimple
-      ? 'Simple passwords are the primary targets in automated leak lists.'
-      : 'Your unique pattern is harder to find in leaked databases.',
+    description: isSimple ? 'First target in automated leak lists.' : 'Unique pattern harder to stuff.',
     isVulnerable: isSimple,
     type: 'stuffing'
   };
