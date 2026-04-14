@@ -1,7 +1,12 @@
+// src/pages/Landing.tsx
+
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { KeyRound, Shield, AlertTriangle, Lock, Eye, Globe, ArrowRight, Timer, Database, Search } from 'lucide-react';
+import { 
+  KeyRound, Shield, AlertTriangle, Lock, Eye, 
+  Globe, ArrowRight, Timer, Database, Search 
+} from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { scorePassword, simulateAttacks } from '@/lib/scenarios';
@@ -46,7 +51,7 @@ export default function Landing() {
           <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-primary/30 border border-primary/40 mb-4 gold-glow">
             <KeyRound className="w-8 h-8 text-primary" />
           </div>
-          <h1 className="text-3xl sm:text-4xl font-display text-foreground gold-text-glow">Memory Palace</h1>
+          <h1 className="text-3xl sm:text-4xl font-display text-foreground gold-text-glow font-bold">Memory Palace</h1>
           <p className="text-muted-foreground mt-2 text-sm sm:text-base flex items-center justify-center gap-1.5">
             <Shield className="w-4 h-4" />
             Test your password against modern cyber attacks.
@@ -65,7 +70,7 @@ export default function Landing() {
 
           <AnimatePresence>
             {scoreResult && (
-              <motion.div initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: 'auto' }} exit={{ opacity: 0, height: 0 }} className="space-y-6">
+              <motion.div initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: 'auto' }} exit={{ opacity: 0, height: 0 }} className="space-y-6 overflow-hidden">
                 <div>
                   <p className="text-xs text-muted-foreground uppercase tracking-widest mb-2 font-semibold">Overall Strength</p>
                   <StrengthMeter score={scoreResult.score} label={scoreResult.label} />
@@ -79,7 +84,7 @@ export default function Landing() {
                       initial={{ opacity: 0, x: -10 }}
                       animate={{ opacity: 1, x: 0 }}
                       transition={{ delay: i * 0.1 }}
-                      className={`p-4 rounded-xl border ${sim.isVulnerable ? 'bg-destructive/5 border-destructive/20' : 'bg-strength-good/5 border-strength-good/20'}`}
+                      className={`p-4 rounded-xl border ${sim.isVulnerable ? 'bg-destructive/10 border-destructive/20' : 'bg-emerald-500/10 border-emerald-500/20'}`}
                     >
                       <div className="flex justify-between items-start mb-1">
                         <div className="flex items-center gap-2">
@@ -88,7 +93,7 @@ export default function Landing() {
                           {sim.type === 'stuffing' && <Database className="w-4 h-4 text-primary" />}
                           <span className="font-display text-sm font-bold">{sim.name}</span>
                         </div>
-                        <span className={`text-xs font-mono font-bold px-2 py-0.5 rounded-full ${sim.isVulnerable ? 'bg-destructive/20 text-destructive' : 'bg-strength-good/20 text-strength-good'}`}>
+                        <span className={`text-xs font-mono font-bold px-2 py-0.5 rounded-full ${sim.isVulnerable ? 'bg-destructive/20 text-destructive' : 'bg-emerald-500/20 text-emerald-400'}`}>
                           {sim.timeLabel}
                         </span>
                       </div>
@@ -108,7 +113,7 @@ export default function Landing() {
         </motion.div>
 
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.45 }}>
-          <h2 className="text-xl sm:text-2xl font-display text-foreground text-center mb-6 gold-text-glow">Why It Matters</h2>
+          <h2 className="text-xl sm:text-2xl font-display text-foreground text-center mb-6 gold-text-glow font-bold">Why It Matters</h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             {securityContent.map((item, i) => (
               <motion.div key={i} initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.5 + i * 0.1 }} className="bg-card border border-border rounded-xl p-5 sm:p-6 shadow-lg hover:border-primary/30 transition-colors">
