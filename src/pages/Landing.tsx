@@ -346,40 +346,6 @@ export default function Landing() {
           </div>
         </motion.div>
 
-        {/* Optional UX Upgrade: Interactive Question */}
-        <motion.div initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} className="mb-20 bg-card border border-border rounded-3xl p-8 text-center shadow-2xl relative overflow-hidden">
-          <div className="absolute top-0 right-0 w-32 h-32 bg-primary/5 rounded-full -mr-16 -mt-16 blur-2xl" />
-          <h3 className="text-xl font-display font-black mb-6 uppercase tracking-tight">Do you use 2FA anywhere right now?</h3>
-          <div className="flex flex-wrap justify-center gap-4">
-            <Button 
-              variant={userHas2FA === 'yes' ? 'default' : 'outline'} 
-              onClick={() => setUserHas2FA('yes')}
-              className="rounded-xl px-8 font-bold"
-            >
-              Yes, I do!
-            </Button>
-            <Button 
-              variant={userHas2FA === 'no' ? 'destructive' : 'outline'} 
-              onClick={() => setUserHas2FA('no')}
-              className="rounded-xl px-8 font-bold"
-            >
-              Not yet.
-            </Button>
-          </div>
-          <AnimatePresence>
-            {userHas2FA === 'yes' && (
-              <motion.p initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="text-primary font-bold mt-6 flex items-center justify-center gap-2">
-                <ThumbsUp className="w-4 h-4" /> Awesome! You're ahead of 90% of people online.
-              </motion.p>
-            )}
-            {userHas2FA === 'no' && (
-              <motion.p initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="text-destructive font-bold mt-6">
-                Let's fix that! It only takes 2 minutes to protect your life.
-              </motion.p>
-            )}
-          </AnimatePresence>
-        </motion.div>
-
         {/* Why Security Matters Section */}
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.5 }}>
           <h2 className="text-xl sm:text-2xl font-display text-foreground text-center mb-8 gold-text-glow font-bold uppercase tracking-wider">Why Security Matters</h2>
