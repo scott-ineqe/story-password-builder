@@ -112,48 +112,6 @@ export const scenarios: Scenario[] = [
     buildPassword: (a) => `${a[0]}${a[1]}${a[3]}${a[2]}`,
     buildStory: (a) => `Your hero "${a[0]}" ${a[1].toLowerCase()} the day, marked by ${a[3]} in the year ${a[2]}.`,
   },
-  {
-    id: 'food-fusion',
-    title: 'The Food Fusion',
-    description: 'Cook up a password from your favorite foods.',
-    icon: '🍕',
-    steps: [
-      {
-        id: 'food',
-        prompt: 'Name your absolute favorite food.',
-        hint: 'The one you could eat every day forever.',
-        placeholder: 'e.g. Tacos',
-        type: 'text',
-        validate: (v) => v.trim().length < 2 ? 'Enter at least 2 characters' : null,
-      },
-      {
-        id: 'twist',
-        prompt: 'Give it a creative twist — misspell or abbreviate it.',
-        hint: 'Make it unique: Tacos → T4c0s, Pizza → P!zza',
-        placeholder: 'e.g. T4c0s',
-        type: 'text',
-        validate: (v) => v.trim().length < 3 ? 'At least 3 characters' : null,
-      },
-      {
-        id: 'quantity',
-        prompt: 'How many would you eat in one sitting? (Pick a number)',
-        hint: 'Be honest... or exaggerate wildly.',
-        placeholder: 'e.g. 99',
-        type: 'number',
-        validate: (v) => /^\d{1,3}$/.test(v) ? null : 'Enter 1–3 digits',
-      },
-      {
-        id: 'spice',
-        prompt: 'Add some spice — pick a special character.',
-        hint: 'The secret ingredient: @ # $ ! & *',
-        placeholder: 'e.g. &',
-        type: 'special',
-        validate: (v) => /^[!@#$%^&*()_+\-=\[\]{}|;:'",.<>?/\\`~]$/.test(v) ? null : 'Enter 1 special character',
-      },
-    ],
-    buildPassword: (a) => `${a[1]}${a[3]}${a[2]}x`,
-    buildStory: (a) => `You love "${a[0]}", coded it as "${a[1]}", spiced it with "${a[3]}", and ordered ${a[2]} of them. Bon appétit!`,
-  },
 ];
 
 export function scorePassword(password: string): {
@@ -198,7 +156,7 @@ export function scorePassword(password: string): {
   return { score, label, color, tips };
 }
 
-// Added back to fix build error in PasswordWizard.tsx
+// Function to maintain compatibility with PasswordWizard.tsx
 export function scoreCommonPassword(password: string) {
   return scorePassword(password);
 }
@@ -229,8 +187,8 @@ export function simulateAttacks(password: string): AttackResult[] {
   const formatTime = (s: number) => {
     if (s < 1) return 'Under 1 sec';
     if (s < 3600) return `${Math.floor(s / 60)} mins`;
-    if (s < 84400) return `${Math.floor(s / 3600)} hours`;
-    if (s < 31536000) return `${Math.floor(s / 84400)} days`;
+    if (s < 86400) return `${Math.floor(s / 3600)} hours`;
+    if (s < 31536000) return `${Math.floor(s / 86400)} days`;
     return `${Math.floor(s / 31536000)} years`;
   };
 
@@ -239,7 +197,7 @@ export function simulateAttacks(password: string): AttackResult[] {
     timeLabel: formatTime(secondsToCrack),
     description: secondsToCrack < 3600 
       ? 'Vulnerable to modern high-speed cracking hardware.'
-      : 'Strong defense against guessing attacks.',
+      : 'Mathematically strong against guessing attacks.',
     isVulnerable: secondsToCrack < 3600,
     type: 'brute'
   };

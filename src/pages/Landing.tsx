@@ -47,17 +47,19 @@ export default function Landing() {
       <div className="fixed top-0 left-1/2 -translate-x-1/2 w-[600px] h-[600px] bg-primary/15 rounded-full blur-[150px] pointer-events-none" />
 
       <div className="w-full max-w-2xl relative z-10">
+        {/* Header */}
         <motion.div initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }} className="text-center mb-10 mt-8">
           <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-primary/30 border border-primary/40 mb-4 gold-glow">
             <KeyRound className="w-8 h-8 text-primary" />
           </div>
-          <h1 className="text-3xl sm:text-4xl font-display text-foreground gold-text-glow font-bold uppercase">Memory Palace</h1>
+          <h1 className="text-3xl sm:text-4xl font-display text-foreground gold-text-glow font-bold uppercase tracking-tight">Memory Palace</h1>
           <p className="text-muted-foreground mt-2 text-sm sm:text-base flex items-center justify-center gap-1.5">
             <Shield className="w-4 h-4" />
             Test your password against modern cyber attacks.
           </p>
         </motion.div>
 
+        {/* Password Checker */}
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.15 }} className="bg-card border border-border rounded-2xl p-6 sm:p-8 mb-6">
           <h2 className="text-lg sm:text-xl font-display text-foreground mb-4 font-bold">Rate Your Current Password</h2>
           <Input
@@ -106,11 +108,38 @@ export default function Landing() {
           </AnimatePresence>
         </motion.div>
 
+        {/* CTA */}
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 }} className="text-center mb-12">
           <Button size="lg" onClick={() => navigate('/forge')} className="bg-primary text-primary-foreground hover:bg-primary/90 text-base px-8 py-6 rounded-xl gold-glow font-bold">
             Forge a Stronger Password <ArrowRight className="w-5 h-5 ml-2" />
           </Button>
+          <p className="text-muted-foreground/70 text-xs mt-3 italic">Build an unforgettable password through storytelling</p>
         </motion.div>
+
+        {/* Educational Content (Why It Matters) */}
+        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.45 }}>
+          <h2 className="text-xl sm:text-2xl font-display text-foreground text-center mb-6 gold-text-glow font-bold">Why Security Matters</h2>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            {securityContent.map((item, i) => (
+              <motion.div key={i} initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.5 + i * 0.1 }} className="bg-card border border-border rounded-xl p-5 sm:p-6 shadow-lg hover:border-primary/30 transition-colors">
+                <div className="flex items-center gap-3 mb-3">
+                  <div className="w-9 h-9 rounded-lg bg-destructive/20 border border-destructive/30 flex items-center justify-center shrink-0">
+                    <item.icon className="w-4 h-4 text-destructive" />
+                  </div>
+                  <h3 className="font-display text-sm sm:text-base text-foreground font-bold">{item.title}</h3>
+                </div>
+                <p className="text-muted-foreground text-xs sm:text-sm leading-relaxed">{item.description}</p>
+              </motion.div>
+            ))}
+          </div>
+        </motion.div>
+
+        {/* Footer */}
+        <div className="text-center mt-12 mb-8">
+          <p className="text-muted-foreground/50 text-xs">
+            Don't Worry! Your password never leaves your browser. Everything runs locally.
+          </p>
+        </div>
       </div>
     </div>
   );
