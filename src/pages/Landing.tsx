@@ -263,6 +263,24 @@ export default function Landing() {
           <p className="text-muted-foreground/80 text-sm mt-5 italic">Build unforgettable, complex passwords using storytelling.</p>
         </motion.div>
 
+        {/* Why Security Matters Section */}
+        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.5 }}>
+          <h2 className="text-2xl sm:text-3xl font-display text-foreground text-center mb-10 gold-text-glow font-bold uppercase tracking-wider">Why Security Matters</h2>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+            {securityContent.map((item, i) => (
+              <motion.div key={i} className="bg-card/40 backdrop-blur-xl border border-white/10 rounded-2xl p-6 sm:p-8 shadow-2xl hover:bg-card/60 hover:border-primary/40 transition-all group">
+                <div className="flex items-center gap-4 mb-4">
+                  <div className="w-12 h-12 rounded-xl bg-destructive/15 border border-destructive/30 flex items-center justify-center shrink-0 group-hover:bg-destructive/25 transition-colors">
+                    <item.icon className="w-6 h-6 text-destructive" />
+                  </div>
+                  <h3 className="font-display text-base sm:text-lg text-foreground font-black tracking-tight uppercase">{item.title}</h3>
+                </div>
+                <p className="text-muted-foreground text-sm leading-relaxed font-medium">{item.description}</p>
+              </motion.div>
+            ))}
+          </div>
+        </motion.div>
+
         {/* 2FA Education Section */}
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.4 }} className="mb-20">
           <div className="text-center mb-10">
@@ -354,24 +372,6 @@ export default function Landing() {
               Top security: <span className="text-foreground font-bold">Security Keys</span>. <br />
               <span className="block mt-5 text-sm font-bold text-foreground bg-primary/20 inline-block px-4 py-2 rounded-lg">👉 Turn on 2FA for your email first (it's your most important account!)</span>
             </p>
-          </div>
-        </motion.div>
-
-        {/* Why Security Matters Section */}
-        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.5 }}>
-          <h2 className="text-2xl sm:text-3xl font-display text-foreground text-center mb-10 gold-text-glow font-bold uppercase tracking-wider">Why Security Matters</h2>
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-            {securityContent.map((item, i) => (
-              <motion.div key={i} className="bg-card/40 backdrop-blur-xl border border-white/10 rounded-2xl p-6 sm:p-8 shadow-2xl hover:bg-card/60 hover:border-primary/40 transition-all group">
-                <div className="flex items-center gap-4 mb-4">
-                  <div className="w-12 h-12 rounded-xl bg-destructive/15 border border-destructive/30 flex items-center justify-center shrink-0 group-hover:bg-destructive/25 transition-colors">
-                    <item.icon className="w-6 h-6 text-destructive" />
-                  </div>
-                  <h3 className="font-display text-base sm:text-lg text-foreground font-black tracking-tight uppercase">{item.title}</h3>
-                </div>
-                <p className="text-muted-foreground text-sm leading-relaxed font-medium">{item.description}</p>
-              </motion.div>
-            ))}
           </div>
         </motion.div>
 
