@@ -191,7 +191,7 @@ export default function PasswordWizard({ scenario, onBack, onPasswordForged }: P
           </motion.div>
         )}
 
-        <div className="flex gap-3">
+        <div className="flex flex-col-reverse sm:flex-row gap-3">
           <Button variant="outline" className="flex-1" onClick={reset}>
             <RotateCcw className="w-4 h-4 mr-2" /> Try Again
           </Button>
@@ -309,7 +309,7 @@ export default function PasswordWizard({ scenario, onBack, onPasswordForged }: P
         )}
       </AnimatePresence>
 
-      <div className="flex gap-3">
+      <div className="flex flex-col-reverse sm:flex-row gap-3">
         {(currentStep > 0 || isComposePhase) && (
           <Button variant="outline" onClick={handlePrev} className="flex-1">
             <ArrowLeft className="w-4 h-4 mr-2" /> Back

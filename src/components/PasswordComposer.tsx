@@ -88,7 +88,7 @@ export default function PasswordComposer({ steps, answers, password, onChange, o
           onChange={(e) => onChange(e.target.value)}
           onKeyDown={onKeyDown}
           placeholder="Type your password here..."
-          className="bg-background/50 border-border focus:border-primary text-foreground font-mono text-lg"
+          className="bg-background/50 border-border focus:border-primary text-foreground font-mono text-base sm:text-lg"
           autoFocus
         />
 

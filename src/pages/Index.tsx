@@ -17,7 +17,7 @@ const Index = () => {
 
   return (
     <div className="min-h-screen palace-gradient flex flex-col items-center p-4 sm:p-8">
-      <div className="fixed top-0 left-1/2 -translate-x-1/2 w-[600px] h-[600px] bg-primary/15 rounded-full blur-[150px] pointer-events-none" />
+      <div className="fixed top-0 left-1/2 -translate-x-1/2 w-[150vw] sm:w-[600px] h-[150vw] sm:h-[600px] bg-primary/15 rounded-full blur-[100px] sm:blur-[150px] pointer-events-none" />
 
       <div className="w-full max-w-2xl relative z-10 mt-4">
         <AppBreadcrumb />
