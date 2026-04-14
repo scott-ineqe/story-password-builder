@@ -51,7 +51,7 @@ export default function Landing() {
           <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-primary/30 border border-primary/40 mb-4 gold-glow">
             <KeyRound className="w-8 h-8 text-primary" />
           </div>
-          <h1 className="text-3xl sm:text-4xl font-display text-foreground gold-text-glow font-bold">Memory Palace</h1>
+          <h1 className="text-3xl sm:text-4xl font-display text-foreground gold-text-glow font-bold uppercase">Memory Palace</h1>
           <p className="text-muted-foreground mt-2 text-sm sm:text-base flex items-center justify-center gap-1.5">
             <Shield className="w-4 h-4" />
             Test your password against modern cyber attacks.
@@ -110,23 +110,6 @@ export default function Landing() {
           <Button size="lg" onClick={() => navigate('/forge')} className="bg-primary text-primary-foreground hover:bg-primary/90 text-base px-8 py-6 rounded-xl gold-glow font-bold">
             Forge a Stronger Password <ArrowRight className="w-5 h-5 ml-2" />
           </Button>
-        </motion.div>
-
-        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.45 }}>
-          <h2 className="text-xl sm:text-2xl font-display text-foreground text-center mb-6 gold-text-glow font-bold">Why It Matters</h2>
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            {securityContent.map((item, i) => (
-              <motion.div key={i} initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.5 + i * 0.1 }} className="bg-card border border-border rounded-xl p-5 sm:p-6 shadow-lg hover:border-primary/30 transition-colors">
-                <div className="flex items-center gap-3 mb-3">
-                  <div className="w-9 h-9 rounded-lg bg-destructive/20 border border-destructive/30 flex items-center justify-center shrink-0">
-                    <item.icon className="w-4 h-4 text-destructive" />
-                  </div>
-                  <h3 className="font-display text-sm sm:text-base text-foreground font-bold">{item.title}</h3>
-                </div>
-                <p className="text-muted-foreground text-xs sm:text-sm leading-relaxed">{item.description}</p>
-              </motion.div>
-            ))}
-          </div>
         </motion.div>
       </div>
     </div>
