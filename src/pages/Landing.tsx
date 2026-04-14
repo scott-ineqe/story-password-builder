@@ -357,40 +357,6 @@ export default function Landing() {
           </div>
         </motion.div>
 
-        {/* Interactive Question */}
-        <motion.div initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} className="mb-20 bg-card/40 backdrop-blur-xl border border-white/10 rounded-3xl p-10 text-center shadow-2xl relative overflow-hidden">
-          <div className="absolute top-0 right-0 w-48 h-48 bg-primary/10 rounded-full -mr-20 -mt-20 blur-3xl" />
-          <h3 className="text-2xl font-display font-black mb-8 uppercase tracking-tight">Do you use 2FA anywhere right now?</h3>
-          <div className="flex flex-wrap justify-center gap-5">
-            <Button 
-              variant={userHas2FA === 'yes' ? 'default' : 'outline'} 
-              onClick={() => setUserHas2FA('yes')}
-              className="rounded-xl px-10 py-6 text-lg font-bold"
-            >
-              Yes, I do!
-            </Button>
-            <Button 
-              variant={userHas2FA === 'no' ? 'destructive' : 'outline'} 
-              onClick={() => setUserHas2FA('no')}
-              className="rounded-xl px-10 py-6 text-lg font-bold border-white/20 hover:bg-secondary/60"
-            >
-              Not yet.
-            </Button>
-          </div>
-          <AnimatePresence>
-            {userHas2FA === 'yes' && (
-              <motion.p initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="text-primary text-lg font-bold mt-8 flex items-center justify-center gap-2">
-                <ThumbsUp className="w-5 h-5" /> Awesome! You're ahead of 90% of people online.
-              </motion.p>
-            )}
-            {userHas2FA === 'no' && (
-              <motion.p initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="text-destructive text-lg font-bold mt-8">
-                Let's fix that! It only takes 2 minutes to protect your life.
-              </motion.p>
-            )}
-          </AnimatePresence>
-        </motion.div>
-
         {/* Why Security Matters Section */}
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.5 }}>
           <h2 className="text-2xl sm:text-3xl font-display text-foreground text-center mb-10 gold-text-glow font-bold uppercase tracking-wider">Why Security Matters</h2>
