@@ -156,6 +156,7 @@ export function scorePassword(password: string): {
   return { score, label, color, tips };
 }
 
+// Function to maintain compatibility with PasswordWizard.tsx
 export function scoreCommonPassword(password: string) {
   return scorePassword(password);
 }
