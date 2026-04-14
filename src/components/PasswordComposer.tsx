@@ -34,8 +34,8 @@ export function usePasswordRequirements(steps: ScenarioStep[], answers: string[]
 
       if (step.type === 'special') {
         reqs.push({
-          label: `Special character "${answer}"`,
-          hint: `Include your chosen shield: ${answer}`,
+          label: `Symbol "${answer}"`,
+          hint: `Include your chosen symbol: ${answer}`,
           check: (pw) => pw.includes(answer),
         });
       } else if (step.type === 'number') {
@@ -44,10 +44,10 @@ export function usePasswordRequirements(steps: ScenarioStep[], answers: string[]
           hint: `Include your number: ${answer}`,
           check: (pw) => pw.includes(answer),
         });
-      } else if (step.id === 'misspell' || step.id === 'twist') {
+      } else if (step.type === 'text') {
         reqs.push({
-          label: `Creative spelling "${answer}"`,
-          hint: `Include your twisted word: ${answer}`,
+          label: `Word "${answer}"`,
+          hint: `Include the word: ${answer}`,
           check: (pw) => pw.toLowerCase().includes(answer.toLowerCase()),
         });
       }
@@ -160,7 +160,7 @@ export function areAllRequirementsMet(
       reqs.push({ label: '', hint: '', check: (pw) => pw.includes(answer) });
     } else if (step.type === 'number') {
       reqs.push({ label: '', hint: '', check: (pw) => pw.includes(answer) });
-    } else if (step.id === 'misspell' || step.id === 'twist') {
+    } else if (step.type === 'text') {
       reqs.push({ label: '', hint: '', check: (pw) => pw.toLowerCase().includes(answer.toLowerCase()) });
     }
   });
