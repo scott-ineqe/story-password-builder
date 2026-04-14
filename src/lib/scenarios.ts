@@ -124,21 +124,21 @@ export function scorePassword(password: string): {
   const tips: string[] = [];
 
   if (password.length >= 8) score += 20;
-  else tips.push('At least 8 characters');
+  else tips.push('Make it at least 8 characters');
   if (password.length >= 12) score += 15;
   if (password.length >= 16) score += 10;
 
   if (/[a-z]/.test(password) && /[A-Z]/.test(password)) score += 15;
-  else tips.push('Mix case (Aa)');
+  else tips.push('Mix uppercase and lowercase');
 
   if (/\d/.test(password)) score += 15;
-  else tips.push('Add numbers (123)');
+  else tips.push('Add some numbers');
 
   if (/[!@#$%^&*()_+\-=\[\]{}|;:'",.<>?/\\`~]/.test(password)) score += 15;
-  else tips.push('Add symbols (!@#)');
+  else tips.push('Include a special character');
 
   if (!/(.)\1{2,}/.test(password)) score += 10;
-  else tips.push('Avoid repeating chars');
+  else tips.push('Avoid repeating characters');
 
   const common = ['password', '123456', 'qwerty', 'abc123', 'letmein', 'admin', 'welcome'];
   if (!common.some(c => password.toLowerCase().includes(c))) score += 10;
@@ -186,6 +186,7 @@ export async function checkBreachedCount(password: string): Promise<number> {
     }
     return 0;
   } catch (error) {
+    console.error('Breach check failed:', error);
     return 0;
   }
 }
@@ -198,8 +199,8 @@ export function simulateAttacks(password: string): AttackResult[] {
     name: 'Dictionary Attack',
     timeLabel: isCommon ? 'Instant' : '> 1 month',
     description: isCommon 
-      ? 'Cracked instantly by automated word matching.'
-      : 'Secure against standard password dictionary lists.',
+      ? 'Cracked instantly! Your password was found in a common dictionary.'
+      : 'Secure. Not found in standard dictionary lists.',
     isVulnerable: isCommon,
     type: 'dictionary'
   };
@@ -215,18 +216,18 @@ export function simulateAttacks(password: string): AttackResult[] {
 
   const formatTime = (s: number) => {
     if (s < 1) return 'Under 1 sec';
-    if (s < 3600) return `${Math.floor(s / 60)}m`;
-    if (s < 86400) return `${Math.floor(s / 3600)}h`;
-    if (s < 31536000) return `${Math.floor(s / 86400)}d`;
-    return `${Math.floor(s / 31536000)}y`;
+    if (s < 3600) return `${Math.floor(s / 60)} mins`;
+    if (s < 86400) return `${Math.floor(s / 3600)} hours`;
+    if (s < 31536000) return `${Math.floor(s / 86400)} days`;
+    return `${Math.floor(s / 31536000)} years`;
   };
 
   const bruteForceAttack: AttackResult = {
     name: 'Brute Force Attack',
     timeLabel: formatTime(secondsToCrack),
     description: secondsToCrack < 3600 
-      ? 'Vulnerable to high-speed guessing hardware.'
-      : 'Mathematically strong against brute-force attempts.',
+      ? 'Vulnerable to modern high-speed cracking hardware.'
+      : 'Mathematically strong against guessing attacks.',
     isVulnerable: secondsToCrack < 3600,
     type: 'brute'
   };
@@ -236,8 +237,8 @@ export function simulateAttacks(password: string): AttackResult[] {
     name: 'Credential Stuffing',
     timeLabel: isSimple ? 'High Risk' : 'Low Risk',
     description: isSimple
-      ? 'First targets in leaked credential databases.'
-      : 'Your unique pattern is less likely to be on stuffing lists.',
+      ? 'Simple passwords are the primary targets in automated leak lists.'
+      : 'Your unique pattern is harder to find in leaked databases.',
     isVulnerable: isSimple,
     type: 'stuffing'
   };
