@@ -1,15 +1,15 @@
 // src/pages/Landing.tsx
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
   KeyRound, Shield, AlertTriangle, Lock, Eye, 
-  Globe, ArrowRight, Timer, Database, Search 
+  Globe, ArrowRight, Timer, Database, Search, ShieldAlert
 } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
-import { scorePassword, simulateAttacks } from '@/lib/scenarios';
+import { scorePassword, simulateAttacks, checkBreachedCount } from '@/lib/scenarios';
 import StrengthMeter from '@/components/StrengthMeter';
 
 const securityContent = [
@@ -37,10 +37,26 @@ const securityContent = [
 
 export default function Landing() {
   const [password, setPassword] = useState('');
+  const [pwnedCount, setPwnedCount] = useState<number | null>(null);
   const navigate = useNavigate();
 
   const scoreResult = password.length > 0 ? scorePassword(password) : null;
   const simulations = password.length > 0 ? simulateAttacks(password) : [];
+
+  // Debounced Breach Check
+  useEffect(() => {
+    if (!password || password.length < 3) {
+      setPwnedCount(null);
+      return;
+    }
+
+    const timer = setTimeout(async () => {
+      const count = await checkBreachedCount(password);
+      setPwnedCount(count);
+    }, 600); // Wait 600ms after last keystroke
+
+    return () => clearTimeout(timer);
+  }, [password]);
 
   return (
     <div className="min-h-screen palace-gradient flex flex-col items-center p-4 sm:p-8">
@@ -80,6 +96,30 @@ export default function Landing() {
 
                 <div className="grid grid-cols-1 gap-3">
                   <p className="text-xs text-muted-foreground uppercase tracking-widest font-semibold mt-2">Attack Simulation</p>
+                  
+                  {/* Breach Check Card */}
+                  <motion.div
+                    initial={{ opacity: 0, x: -10 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    className={`p-4 rounded-xl border ${pwnedCount && pwnedCount > 0 ? 'bg-destructive/10 border-destructive/20' : 'bg-emerald-500/10 border-emerald-500/20'}`}
+                  >
+                    <div className="flex justify-between items-start mb-1">
+                      <div className="flex items-center gap-2">
+                        <ShieldAlert className="w-4 h-4 text-primary" />
+                        <span className="font-display text-sm font-bold uppercase">Have I Been Breached?</span>
+                      </div>
+                      <span className={`text-xs font-mono font-bold px-2 py-0.5 rounded-full ${pwnedCount && pwnedCount > 0 ? 'bg-destructive/20 text-destructive' : 'bg-emerald-500/20 text-emerald-400'}`}>
+                        {pwnedCount === null ? 'Checking...' : pwnedCount > 0 ? 'PWNED' : 'CLEAN'}
+                      </span>
+                    </div>
+                    <p className="text-xs text-muted-foreground leading-relaxed">
+                      {pwnedCount === null ? 'Scanning known data breaches...' : 
+                       pwnedCount > 0 ? `This password has appeared in ${pwnedCount.toLocaleString()} known data breaches. It is compromised and unsafe to use.` : 
+                       'No known matches found in database leaks. Privacy check complete.'}
+                    </p>
+                  </motion.div>
+
+                  {/* Other Simulation Cards */}
                   {simulations.map((sim, i) => (
                     <motion.div
                       key={sim.name}
@@ -93,7 +133,7 @@ export default function Landing() {
                           {sim.type === 'dictionary' && <Search className="w-4 h-4 text-primary" />}
                           {sim.type === 'brute' && <Timer className="w-4 h-4 text-primary" />}
                           {sim.type === 'stuffing' && <Database className="w-4 h-4 text-primary" />}
-                          <span className="font-display text-sm font-bold">{sim.name}</span>
+                          <span className="font-display text-sm font-bold uppercase">{sim.name}</span>
                         </div>
                         <span className={`text-xs font-mono font-bold px-2 py-0.5 rounded-full ${sim.isVulnerable ? 'bg-destructive/20 text-destructive' : 'bg-emerald-500/20 text-emerald-400'}`}>
                           {sim.timeLabel}
@@ -110,7 +150,7 @@ export default function Landing() {
 
         {/* CTA */}
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 }} className="text-center mb-12">
-          <Button size="lg" onClick={() => navigate('/forge')} className="bg-primary text-primary-foreground hover:bg-primary/90 text-base px-8 py-6 rounded-xl gold-glow font-bold">
+          <Button size="lg" onClick={() => navigate('/forge')} className="bg-primary text-primary-foreground hover:bg-primary/90 text-base px-8 py-6 rounded-xl gold-glow font-bold uppercase tracking-wider">
             Forge a Stronger Password <ArrowRight className="w-5 h-5 ml-2" />
           </Button>
           <p className="text-muted-foreground/70 text-xs mt-3 italic">Build an unforgettable password through storytelling</p>
