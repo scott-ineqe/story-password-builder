@@ -1,5 +1,3 @@
-// src/components/StrengthMeter.tsx
-
 import { motion } from 'framer-motion';
 
 interface Props {
@@ -25,21 +23,17 @@ export default function StrengthMeter({ score, label }: Props) {
   };
 
   return (
-    <div className="space-y-2" role="progressbar" aria-valuenow={score} aria-valuemin={0} aria-valuemax={100} aria-label={`Password strength: ${label}`}>
-      <div className="flex justify-between items-end mb-1">
-        <span className={`text-xs font-bold uppercase tracking-widest ${getTextColor()}`}>
-          Security Status: {label}
-        </span>
-        <span className={`text-xl font-display font-bold ${getTextColor()}`}>
-          {score}%
-        </span>
+    <div className="space-y-1.5">
+      <div className="flex justify-between items-center">
+        <span className={`text-sm font-semibold ${getTextColor()}`}>{label}</span>
+        <span className={`text-sm font-mono ${getTextColor()}`}>{score}/100</span>
       </div>
-      <div className="h-3 rounded-full bg-secondary/50 border border-border/50 overflow-hidden backdrop-blur-sm">
+      <div className="h-2.5 rounded-full bg-secondary overflow-hidden">
         <motion.div
           initial={{ width: 0 }}
           animate={{ width: `${score}%` }}
-          transition={{ duration: 1, ease: [0.22, 1, 0.36, 1] }}
-          className={`h-full rounded-full shadow-lg ${getColor()}`}
+          transition={{ duration: 0.8, ease: 'easeOut' }}
+          className={`h-full rounded-full ${getColor()}`}
         />
       </div>
     </div>

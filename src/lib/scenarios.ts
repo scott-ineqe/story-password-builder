@@ -70,12 +70,53 @@ export const scenarios: Scenario[] = [
     buildPassword: (a) => `${a[3]}${a[2]}${a[1]}.`,
     buildStory: (a) => `You took "${a[0]}", twisted it into "${a[3]}", shielded it with "${a[2]}", stamped it with ${a[1]}, and sealed it with a period.`,
   },
+  {
+    id: 'hero-quest',
+    title: 'The Hero Quest',
+    description: 'Build a password from your personal hero and a quest.',
+    icon: '⚔️',
+    steps: [
+      {
+        id: 'hero',
+        prompt: 'Name a personal hero or someone you admire.',
+        hint: 'Real or fictional — someone whose name sticks in your mind.',
+        placeholder: 'e.g. Batman',
+        type: 'text',
+        validate: (v) => v.trim().length < 2 ? 'Enter at least 2 characters' : null,
+      },
+      {
+        id: 'action',
+        prompt: 'Pick an action verb — something powerful.',
+        hint: 'What does your hero do? Fights, Builds, Flies, Saves...',
+        placeholder: 'e.g. Saves',
+        type: 'text',
+        validate: (v) => v.trim().length < 2 ? 'Enter a verb' : null,
+      },
+      {
+        id: 'year',
+        prompt: 'Pick a meaningful year.',
+        hint: 'Birth year, graduation, a year you\'ll never forget.',
+        placeholder: 'e.g. 2003',
+        type: 'number',
+        validate: (v) => /^\d{4}$/.test(v) ? null : 'Enter a 4-digit year',
+      },
+      {
+        id: 'symbol',
+        prompt: 'Choose your battle symbol.',
+        hint: 'A special character: ! @ # $ % ^',
+        placeholder: 'e.g. !',
+        type: 'special',
+        validate: (v) => /^[!@#$%^&*()_+\-=\[\]{}|;:'",.<>?/\\`~]$/.test(v) ? null : 'Enter exactly 1 special character',
+      },
+    ],
+    buildPassword: (a) => `${a[0]}${a[1]}${a[3]}${a[2]}`,
+    buildStory: (a) => `Your hero "${a[0]}" ${a[1].toLowerCase()} the day, marked by ${a[3]} in the year ${a[2]}.`,
+  },
 ];
 
 export function scorePassword(password: string): {
   score: number;
   label: string;
-  rank: string; // Added for UI engagement
   color: string;
   tips: string[];
 } {
@@ -105,21 +146,22 @@ export function scorePassword(password: string): {
   score = Math.min(100, score);
 
   let label: string;
-  let rank: string;
   let color: string;
-  if (score < 30) { label = 'Weak'; rank = 'Peasant'; color = 'strength-weak'; }
-  else if (score < 50) { label = 'Fair'; rank = 'Squire'; color = 'strength-fair'; }
-  else if (score < 70) { label = 'Good'; rank = 'Knight'; color = 'strength-good'; }
-  else if (score < 90) { label = 'Strong'; rank = 'Warden'; color = 'strength-strong'; }
-  else { label = 'Legendary'; rank = 'Overlord'; color = 'strength-legendary'; }
+  if (score < 30) { label = 'Weak'; color = 'strength-weak'; }
+  else if (score < 50) { label = 'Fair'; color = 'strength-fair'; }
+  else if (score < 70) { label = 'Good'; color = 'strength-good'; }
+  else if (score < 90) { label = 'Strong'; color = 'strength-strong'; }
+  else { label = 'Legendary'; color = 'strength-legendary'; }
 
-  return { score, label, rank, color, tips };
+  return { score, label, color, tips };
 }
 
+// Function to maintain compatibility with PasswordWizard.tsx
 export function scoreCommonPassword(password: string) {
   return scorePassword(password);
 }
 
+// "Have I Been Pwned" API Check (K-Anonymity)
 export async function checkBreachedCount(password: string): Promise<number> {
   try {
     const encoder = new TextEncoder();
@@ -127,18 +169,25 @@ export async function checkBreachedCount(password: string): Promise<number> {
     const hashBuffer = await crypto.subtle.digest('SHA-1', data);
     const hashArray = Array.from(new Uint8Array(hashBuffer));
     const hashHex = hashArray.map(b => b.toString(16).padStart(2, '0')).join('').toUpperCase();
+
     const prefix = hashHex.slice(0, 5);
     const suffix = hashHex.slice(5);
+
     const response = await fetch(`https://api.pwnedpasswords.com/range/${prefix}`);
     if (!response.ok) return 0;
+
     const text = await response.text();
     const lines = text.split('\n');
+    
     for (const line of lines) {
       const [lineSuffix, count] = line.split(':');
-      if (lineSuffix === suffix) return parseInt(count.trim(), 10);
+      if (lineSuffix === suffix) {
+        return parseInt(count.trim(), 10);
+      }
     }
     return 0;
   } catch (error) {
+    console.error('Breach check failed:', error);
     return 0;
   }
 }
@@ -146,41 +195,54 @@ export async function checkBreachedCount(password: string): Promise<number> {
 export function simulateAttacks(password: string): AttackResult[] {
   const common = ['password', '123456', 'qwerty', 'abc123', 'letmein', 'admin', 'welcome', 'password123'];
   const isCommon = common.some(c => password.toLowerCase().includes(c));
+  
   const dictionaryAttack: AttackResult = {
     name: 'Dictionary Attack',
     timeLabel: isCommon ? 'Instant' : '> 1 month',
-    description: isCommon ? 'Found in common lists.' : 'Unique pattern.',
+    description: isCommon 
+      ? 'Cracked instantly! Your password was found in a common dictionary.'
+      : 'Secure. Not found in standard dictionary lists.',
     isVulnerable: isCommon,
     type: 'dictionary'
   };
+
   let charsetSize = 0;
   if (/[a-z]/.test(password)) charsetSize += 26;
   if (/[A-Z]/.test(password)) charsetSize += 26;
   if (/\d/.test(password)) charsetSize += 10;
   if (/[!@#$%^&*()_+\-=\[\]{}|;:'",.<>?/\\`~]/.test(password)) charsetSize += 32;
+
   const combinations = Math.pow(charsetSize || 1, password.length);
   const secondsToCrack = combinations / 10_000_000_000;
+
   const formatTime = (s: number) => {
-    if (s < 1) return '< 1s';
-    if (s < 3600) return `${Math.floor(s / 60)}m`;
-    if (s < 86400) return `${Math.floor(s / 3600)}h`;
-    if (s < 31536000) return `${Math.floor(s / 86400)}d`;
-    return `${Math.floor(s / 31536000)}y`;
+    if (s < 1) return 'Under 1 sec';
+    if (s < 3600) return `${Math.floor(s / 60)} mins`;
+    if (s < 86400) return `${Math.floor(s / 3600)} hours`;
+    if (s < 31536000) return `${Math.floor(s / 86400)} days`;
+    return `${Math.floor(s / 31536000)} years`;
   };
+
   const bruteForceAttack: AttackResult = {
-    name: 'Brute Force',
+    name: 'Brute Force Attack',
     timeLabel: formatTime(secondsToCrack),
-    description: secondsToCrack < 3600 ? 'Fast Crack' : 'Mathematically Strong',
+    description: secondsToCrack < 3600 
+      ? 'Vulnerable to modern high-speed cracking hardware.'
+      : 'Mathematically strong against guessing attacks.',
     isVulnerable: secondsToCrack < 3600,
     type: 'brute'
   };
+
   const isSimple = password.length < 10;
   const stuffingAttack: AttackResult = {
     name: 'Credential Stuffing',
     timeLabel: isSimple ? 'High Risk' : 'Low Risk',
-    description: isSimple ? 'Target for leak lists.' : 'Unique footprint.',
+    description: isSimple
+      ? 'Simple passwords are the primary targets in automated leak lists.'
+      : 'Your unique pattern is harder to find in leaked databases.',
     isVulnerable: isSimple,
     type: 'stuffing'
   };
+
   return [dictionaryAttack, bruteForceAttack, stuffingAttack];
 }

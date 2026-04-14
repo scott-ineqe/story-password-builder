@@ -4,9 +4,9 @@ import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
-  KeyRound, Shield, AlertTriangle, Lock, Eye, Globe, ArrowRight, 
-  Timer, Database, Search, ShieldAlert, Smartphone, Key, ShieldCheck, 
-  ChevronRight, Activity, Zap
+  KeyRound, Shield, AlertTriangle, Lock, Eye, 
+  Globe, ArrowRight, Timer, Database, Search, 
+  ShieldAlert, Smartphone, Key, Fingerprint, ShieldCheck
 } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
@@ -14,16 +14,53 @@ import { scorePassword, simulateAttacks, checkBreachedCount } from '@/lib/scenar
 import StrengthMeter from '@/components/StrengthMeter';
 
 const securityContent = [
-  { icon: AlertTriangle, title: 'Breach Alert', desc: 'Over 22B records exposed in 2024. Weak links break first.' },
-  { icon: Eye, title: 'Speed Kills', desc: 'Modern hardware tests billions of combinations every second.' },
-  { icon: Globe, title: 'Credential Reuse', desc: 'Hackers try one leaked password across all your accounts.' },
-  { icon: Lock, title: 'Identity Theft', desc: 'A bad password is the #1 gateway to financial loss.' },
+  {
+    icon: AlertTriangle,
+    title: 'Data Breaches Are Rampant',
+    description: 'Over 22 billion records were exposed in 2024. A weak password is often the first domino to fall.',
+  },
+  {
+    icon: Eye,
+    title: 'Brute Force Is Faster',
+    description: 'Modern hardware tests billions of combinations per second. A 6-character password can be cracked instantly.',
+  },
+  {
+    icon: Globe,
+    title: 'Credential Stuffing',
+    description: 'Hackers take leaked passwords from one site and try them everywhere else. Reuse is the biggest risk.',
+  },
+  {
+    icon: Lock,
+    title: 'Identity Theft',
+    description: 'Weak passwords are the #1 gateway to identity theft, leading to hundreds of hours of recovery time.',
+  },
 ];
 
-const methods = [
-  { name: 'SMS Codes', tier: 'Basic', pro: 'No app needed', con: 'SIM Swap risk', icon: Globe, color: 'text-amber-400' },
-  { name: 'Auth Apps', tier: 'Pro', pro: 'Hard to intercept', con: 'Needs device', icon: Smartphone, color: 'text-emerald-400' },
-  { name: 'YubiKeys', tier: 'Ultra', pro: 'Phish-proof', con: 'Physical loss', icon: Key, color: 'text-primary' },
+const twoFactorMethods = [
+  {
+    type: 'SMS Codes',
+    level: 'Basic',
+    pros: 'Easy to set up; no smartphone app required.',
+    cons: 'Vulnerable to "SIM Swapping" and intercepted texts.',
+    icon: Globe,
+    color: 'text-amber-400',
+  },
+  {
+    type: 'Authenticator Apps',
+    level: 'Advanced',
+    pros: 'Works offline; harder to intercept. (e.g., Google Authenticator, Authy)',
+    cons: 'Requires you to have your device handy at all times.',
+    icon: Smartphone,
+    color: 'text-emerald-400',
+  },
+  {
+    type: 'Hardware Keys',
+    level: 'Legendary',
+    pros: 'Immune to phishing. Physical "tap" required to log in. (e.g., YubiKey)',
+    cons: 'Costs money; can be lost if not attached to a keychain.',
+    icon: Key,
+    color: 'text-primary',
+  },
 ];
 
 export default function Landing() {
@@ -35,171 +72,202 @@ export default function Landing() {
   const simulations = password.length > 0 ? simulateAttacks(password) : [];
 
   useEffect(() => {
-    if (!password || password.length < 3) { setPwnedCount(null); return; }
-    const t = setTimeout(async () => setPwnedCount(await checkBreachedCount(password)), 600);
-    return () => clearTimeout(t);
+    if (!password || password.length < 3) {
+      setPwnedCount(null);
+      return;
+    }
+    const timer = setTimeout(async () => {
+      const count = await checkBreachedCount(password);
+      setPwnedCount(count);
+    }, 600);
+    return () => clearTimeout(timer);
   }, [password]);
 
   return (
-    <div className="min-h-screen bg-[#050505] text-foreground selection:bg-primary selection:text-black">
-      {/* Dynamic Background */}
-      <div className="fixed inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute top-[-10%] left-[20%] w-[500px] h-[500px] bg-primary/10 rounded-full blur-[120px] animate-pulse" />
-        <div className="absolute bottom-[-5%] right-[10%] w-[400px] h-[400px] bg-emerald-500/5 rounded-full blur-[100px]" />
-      </div>
+    <div className="min-h-screen palace-gradient flex flex-col items-center p-4 sm:p-8">
+      <div className="fixed top-0 left-1/2 -translate-x-1/2 w-[600px] h-[600px] bg-primary/15 rounded-full blur-[150px] pointer-events-none" />
 
-      <div className="relative z-10 max-w-4xl mx-auto px-6 py-12 md:py-20">
-        {/* Hero Section */}
-        <header className="text-center mb-16">
-          <motion.div initial={{ scale: 0.8, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} className="inline-block p-4 rounded-3xl bg-secondary/30 border border-border/50 mb-6 backdrop-blur-xl gold-glow">
-            <KeyRound className="w-10 h-10 text-primary" />
-          </motion.div>
-          <h1 className="text-5xl md:text-6xl font-display font-black uppercase tracking-tighter gold-text-glow mb-4">
-            Memory Palace
-          </h1>
-          <p className="text-muted-foreground text-lg max-w-lg mx-auto leading-relaxed">
-            Stop creating weak passwords. Start building uncrackable digital fortresses.
+      <div className="w-full max-w-2xl relative z-10">
+        {/* Header */}
+        <motion.div initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }} className="text-center mb-10 mt-8">
+          <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-primary/30 border border-primary/40 mb-4 gold-glow">
+            <KeyRound className="w-8 h-8 text-primary" />
+          </div>
+          <h1 className="text-3xl sm:text-4xl font-display text-foreground gold-text-glow font-bold uppercase tracking-tight">Memory Palace</h1>
+          <p className="text-muted-foreground mt-2 text-sm sm:text-base flex items-center justify-center gap-1.5">
+            <Shield className="w-4 h-4" />
+            Build a fortress for your digital identity.
           </p>
-        </header>
+        </motion.div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 mb-16">
-          {/* Main Interaction Card */}
-          <motion.section initial={{ y: 20, opacity: 0 }} animate={{ y: 0, opacity: 1 }} className="lg:col-span-7 bg-card/40 border border-border/60 rounded-[2.5rem] p-8 backdrop-blur-md shadow-2xl">
-            <h2 className="text-xl font-display font-bold mb-6 flex items-center gap-2">
-              <Zap className="w-5 h-5 text-primary" /> Instant Audit
-            </h2>
-            
-            <div className="relative mb-8">
-              <Input
-                type="password"
-                placeholder="Type your current password..."
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                className="h-16 bg-secondary/50 border-border rounded-2xl px-6 text-xl font-mono focus:ring-2 focus:ring-primary/50 transition-all"
-                aria-label="Enter password to check"
-              />
-              <Lock className="absolute right-6 top-1/2 -translate-y-1/2 text-muted-foreground/40 w-5 h-5" />
-            </div>
+        {/* Password Checker */}
+        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.15 }} className="bg-card border border-border rounded-2xl p-6 sm:p-8 mb-6">
+          <h2 className="text-lg sm:text-xl font-display text-foreground mb-4 font-bold">Rate Your Current Password</h2>
+          <Input
+            type="password"
+            placeholder="Enter your current password…"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            className="bg-secondary border-border text-foreground placeholder:text-muted-foreground/60 mb-6 text-lg font-mono"
+          />
 
-            <AnimatePresence mode="wait">
-              {scoreResult ? (
-                <motion.div key="results" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="space-y-8">
-                  <div className="p-6 rounded-3xl bg-secondary/20 border border-border/40">
-                    <StrengthMeter score={scoreResult.score} label={scoreResult.label} />
-                    <div className="mt-4 flex items-center gap-2">
-                      <div className="px-3 py-1 rounded-full bg-primary/20 text-primary text-[10px] font-black uppercase tracking-widest">
-                        Rank: {scoreResult.rank}
+          <AnimatePresence>
+            {scoreResult && (
+              <motion.div initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: 'auto' }} exit={{ opacity: 0, height: 0 }} className="space-y-6 overflow-hidden">
+                <div>
+                  <p className="text-xs text-muted-foreground uppercase tracking-widest mb-2 font-semibold">Overall Strength</p>
+                  <StrengthMeter score={scoreResult.score} label={scoreResult.label} />
+                </div>
+
+                <div className="grid grid-cols-1 gap-3">
+                  <p className="text-xs text-muted-foreground uppercase tracking-widest font-semibold mt-2">Live Security Audit</p>
+                  
+                  {/* Breach Check Card */}
+                  <motion.div
+                    className={`p-4 rounded-xl border ${pwnedCount && pwnedCount > 0 ? 'bg-destructive/10 border-destructive/20' : 'bg-emerald-500/10 border-emerald-500/20'}`}
+                  >
+                    <div className="flex justify-between items-start mb-1">
+                      <div className="flex items-center gap-2">
+                        <ShieldAlert className="w-4 h-4 text-primary" />
+                        <span className="font-display text-sm font-bold uppercase tracking-tight">Data Breach Check</span>
                       </div>
+                      <span className={`text-xs font-mono font-bold px-2 py-0.5 rounded-full ${pwnedCount && pwnedCount > 0 ? 'bg-destructive/20 text-destructive' : 'bg-emerald-500/20 text-emerald-400'}`}>
+                        {pwnedCount === null ? 'Scanning...' : pwnedCount > 0 ? 'VULNERABLE' : 'SECURE'}
+                      </span>
                     </div>
-                  </div>
+                    <p className="text-xs text-muted-foreground leading-relaxed">
+                      {pwnedCount === null ? 'Querying local privacy-safe database...' : 
+                       pwnedCount > 0 ? `This password has appeared in ${pwnedCount.toLocaleString()} known leaks. Stop using it immediately.` : 
+                       'Zero matches found in known database breaches. Your pattern is unique!'}
+                    </p>
+                  </motion.div>
 
-                  <div className="grid grid-cols-1 gap-4">
-                    <div className={`p-5 rounded-2xl border transition-colors ${pwnedCount ? 'bg-destructive/10 border-destructive/30' : 'bg-emerald-500/10 border-emerald-500/30'}`}>
-                      <div className="flex justify-between items-center mb-2">
-                        <span className="text-xs font-black uppercase flex items-center gap-2 tracking-widest"><ShieldAlert className="w-4 h-4" /> Breached?</span>
-                        <span className="font-mono text-xs font-bold">{pwnedCount === null ? 'Scanning...' : pwnedCount > 0 ? 'FAIL' : 'CLEAN'}</span>
-                      </div>
-                      <p className="text-sm opacity-80 leading-snug">
-                        {pwnedCount === null ? 'Scanning leaks...' : pwnedCount > 0 ? `Matches ${pwnedCount.toLocaleString()} breaches.` : 'No matches found in leaks.'}
-                      </p>
-                    </div>
-
-                    {simulations.map((sim, i) => (
-                      <div key={i} className={`p-5 rounded-2xl border ${sim.isVulnerable ? 'bg-destructive/5 border-border/40' : 'bg-emerald-500/5 border-border/40'}`}>
-                        <div className="flex justify-between items-center mb-1">
-                          <span className="text-xs font-bold opacity-60 uppercase tracking-tighter">{sim.name}</span>
-                          <span className={`font-mono text-sm font-black ${sim.isVulnerable ? 'text-destructive' : 'text-emerald-400'}`}>{sim.timeLabel}</span>
+                  {/* Simulation Cards */}
+                  {simulations.map((sim, i) => (
+                    <motion.div
+                      key={sim.name}
+                      initial={{ opacity: 0, x: -10 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      transition={{ delay: i * 0.1 }}
+                      className={`p-4 rounded-xl border ${sim.isVulnerable ? 'bg-destructive/10 border-destructive/20' : 'bg-emerald-500/10 border-emerald-500/20'}`}
+                    >
+                      <div className="flex justify-between items-start mb-1">
+                        <div className="flex items-center gap-2">
+                          {sim.type === 'dictionary' && <Search className="w-4 h-4 text-primary" />}
+                          {sim.type === 'brute' && <Timer className="w-4 h-4 text-primary" />}
+                          {sim.type === 'stuffing' && <Database className="w-4 h-4 text-primary" />}
+                          <span className="font-display text-sm font-bold uppercase tracking-tight">{sim.name}</span>
                         </div>
-                        <p className="text-xs opacity-50">{sim.description}</p>
+                        <span className={`text-xs font-mono font-bold px-2 py-0.5 rounded-full ${sim.isVulnerable ? 'bg-destructive/20 text-destructive' : 'bg-emerald-500/20 text-emerald-400'}`}>
+                          {sim.timeLabel}
+                        </span>
                       </div>
-                    ))}
-                  </div>
-                </motion.div>
-              ) : (
-                <div className="py-20 text-center opacity-20 flex flex-col items-center">
-                  <Activity className="w-12 h-12 mb-4 animate-pulse" />
-                  <p className="font-display font-bold uppercase">Ready for Analysis</p>
+                      <p className="text-xs text-muted-foreground leading-relaxed">{sim.description}</p>
+                    </motion.div>
+                  ))}
                 </div>
-              )}
-            </AnimatePresence>
-          </motion.section>
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </motion.div>
 
-          {/* CTA & Education Sidebar */}
-          <div className="lg:col-span-5 space-y-6">
-            <motion.button
-              whileHover={{ scale: 1.02 }}
-              whileTap={{ scale: 0.98 }}
-              onClick={() => navigate('/forge')}
-              className="w-full bg-primary text-black font-black p-8 rounded-[2.5rem] flex flex-col items-center gap-4 transition-all gold-glow shadow-xl"
-            >
-              <ShieldCheck className="w-12 h-12" />
-              <div className="text-center">
-                <span className="text-xs uppercase tracking-widest block opacity-70">Step 2</span>
-                <span className="text-2xl font-display uppercase tracking-tight">Forge a Legend</span>
+        {/* CTA */}
+        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 }} className="text-center mb-16">
+          <Button size="lg" onClick={() => navigate('/forge')} className="bg-primary text-primary-foreground hover:bg-primary/90 text-base px-8 py-6 rounded-xl gold-glow font-bold uppercase tracking-widest">
+            Forge a Stronger Password <ArrowRight className="w-5 h-5 ml-2" />
+          </Button>
+          <p className="text-muted-foreground/70 text-xs mt-3 italic">Memory Palace uses storytelling to help you remember complex keys.</p>
+        </motion.div>
+
+        {/* 2FA Education Section */}
+        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.4 }} className="mb-16">
+          <div className="flex flex-col items-center mb-8">
+            <div className="w-12 h-12 rounded-xl bg-emerald-500/20 border border-emerald-500/30 flex items-center justify-center mb-3">
+              <ShieldCheck className="w-6 h-6 text-emerald-400" />
+            </div>
+            <h2 className="text-2xl font-display text-foreground font-bold gold-text-glow">The Two Keys to Your Kingdom</h2>
+            <p className="text-muted-foreground text-center mt-2 max-w-md">Even the best password isn't enough. Two-Factor Authentication (2FA) adds a second layer of defense.</p>
+          </div>
+
+          
+
+[Image of Two-Factor Authentication concept]
+
+
+          <div className="bg-card/50 border border-border rounded-2xl p-6 mb-6">
+            <h3 className="text-lg font-display text-primary font-bold mb-4 uppercase tracking-wider">How 2FA Works</h3>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+              <div className="flex gap-4">
+                <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center shrink-0 border border-primary/20">
+                  <Fingerprint className="w-5 h-5 text-primary" />
+                </div>
+                <div>
+                  <h4 className="font-bold text-sm">Something You Know</h4>
+                  <p className="text-xs text-muted-foreground mt-1">Your Memory Palace password or a master phrase.</p>
+                </div>
               </div>
-              <ChevronRight className="w-6 h-6" />
-            </motion.button>
-
-            <div className="grid grid-cols-2 gap-4">
-              {securityContent.map((item, i) => (
-                <div key={i} className="p-4 rounded-3xl bg-secondary/20 border border-border/40 text-center">
-                  <item.icon className="w-5 h-5 mx-auto mb-2 text-primary opacity-60" />
-                  <h4 className="text-[10px] font-black uppercase mb-1 tracking-widest">{item.title}</h4>
-                  <p className="text-[10px] opacity-40 leading-tight">{item.desc}</p>
+              <div className="flex gap-4">
+                <div className="w-10 h-10 rounded-full bg-emerald-500/10 flex items-center justify-center shrink-0 border border-emerald-500/20">
+                  <Smartphone className="w-5 h-5 text-emerald-400" />
                 </div>
-              ))}
+                <div>
+                  <h4 className="font-bold text-sm">Something You Have</h4>
+                  <p className="text-xs text-muted-foreground mt-1">A physical device like your smartphone or a security key.</p>
+                </div>
+              </div>
             </div>
           </div>
-        </div>
 
-        {/* 2FA Command Center */}
-        <section className="mb-20">
-          <div className="flex items-center gap-4 mb-10">
-            <div className="h-px flex-1 bg-border/50" />
-            <h2 className="text-2xl font-display font-black uppercase tracking-widest text-primary italic">2FA Fortress</h2>
-            <div className="h-px flex-1 bg-border/50" />
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {methods.map((m, i) => (
-              <motion.div
-                key={i}
-                whileHover={{ y: -5 }}
-                className="bg-card/40 border border-border/50 rounded-3xl p-6 relative overflow-hidden group backdrop-blur-sm"
-              >
-                <div className={`absolute top-0 right-0 p-4 opacity-5 group-hover:opacity-10 transition-opacity ${m.color}`}>
-                  <m.icon className="w-20 h-20" />
+          <div className="space-y-4">
+            <h3 className="text-sm text-muted-foreground uppercase tracking-[0.2em] font-bold text-center mb-4">Compare 2FA Methods</h3>
+            {twoFactorMethods.map((method, i) => (
+              <motion.div key={i} className="bg-card border border-border rounded-xl p-5 hover:border-primary/20 transition-all shadow-md">
+                <div className="flex items-center justify-between mb-3">
+                  <div className="flex items-center gap-3">
+                    <method.icon className={`w-5 h-5 ${method.color}`} />
+                    <h4 className="font-display font-bold text-foreground uppercase tracking-tight">{method.type}</h4>
+                  </div>
+                  <span className={`text-[10px] font-bold px-2 py-0.5 rounded bg-secondary border border-border tracking-widest ${method.color}`}>{method.level}</span>
                 </div>
-                <div className="relative z-10">
-                  <div className="flex items-center gap-3 mb-4">
-                    <m.icon className={`w-5 h-5 ${m.color}`} />
-                    <h3 className="font-display font-bold uppercase text-sm tracking-widest">{m.name}</h3>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs">
+                  <div>
+                    <span className="text-emerald-400 font-bold uppercase tracking-tighter">Pros:</span>
+                    <p className="text-muted-foreground mt-1 leading-relaxed">{method.pros}</p>
                   </div>
-                  <div className="space-y-4">
-                    <div>
-                      <span className="text-[10px] font-black text-emerald-400 uppercase tracking-widest block mb-1">Benefit</span>
-                      <p className="text-sm opacity-70">{m.pro}</p>
-                    </div>
-                    <div>
-                      <span className="text-[10px] font-black text-destructive uppercase tracking-widest block mb-1">Risk</span>
-                      <p className="text-sm opacity-70">{m.con}</p>
-                    </div>
-                  </div>
-                  <div className={`mt-6 inline-block px-3 py-1 rounded-full text-[9px] font-black uppercase tracking-[0.2em] border border-border/60 ${m.color}`}>
-                    Tier: {m.tier}
+                  <div>
+                    <span className="text-destructive font-bold uppercase tracking-tighter">Cons:</span>
+                    <p className="text-muted-foreground mt-1 leading-relaxed">{method.cons}</p>
                   </div>
                 </div>
               </motion.div>
             ))}
           </div>
-        </section>
+        </motion.div>
+
+        {/* Existing Educational Content (Why It Matters) */}
+        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.5 }}>
+          <h2 className="text-xl sm:text-2xl font-display text-foreground text-center mb-8 gold-text-glow font-bold uppercase">Why Security Matters</h2>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            {securityContent.map((item, i) => (
+              <motion.div key={i} initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.5 + i * 0.1 }} className="bg-card border border-border rounded-xl p-5 sm:p-6 shadow-lg hover:border-primary/30 transition-colors">
+                <div className="flex items-center gap-3 mb-3">
+                  <div className="w-9 h-9 rounded-lg bg-destructive/20 border border-destructive/30 flex items-center justify-center shrink-0">
+                    <item.icon className="w-4 h-4 text-destructive" />
+                  </div>
+                  <h3 className="font-display text-sm sm:text-base text-foreground font-bold tracking-tight">{item.title}</h3>
+                </div>
+                <p className="text-muted-foreground text-xs sm:text-sm leading-relaxed">{item.description}</p>
+              </motion.div>
+            ))}
+          </div>
+        </motion.div>
 
         {/* Footer */}
-        <footer className="text-center pt-12 border-t border-border/40">
-          <p className="text-xs text-muted-foreground/30 uppercase tracking-[0.3em] font-bold">
-            Computed locally • No data sent • Privacy first
+        <div className="text-center mt-16 mb-8 border-t border-border pt-8">
+          <p className="text-muted-foreground/50 text-xs max-w-md mx-auto leading-relaxed">
+            Memory Palace runs entirely in your browser. We never see, store, or transmit your passwords. Everything is computed locally on your device for maximum privacy.
           </p>
-        </footer>
+        </div>
       </div>
     </div>
   );
