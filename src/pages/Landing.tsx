@@ -247,7 +247,7 @@ export default function Landing() {
         {/* CTA */}
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 }} className="text-center mb-20">
           <Button size="lg" onClick={() => navigate('/forge')} className="bg-primary text-primary-foreground hover:bg-primary/90 text-base px-8 py-6 rounded-xl gold-glow font-bold uppercase tracking-widest transition-all hover:scale-105">
-            Forge a Legend <ArrowRight className="w-5 h-5 ml-2" />
+            Forge a secure password <ArrowRight className="w-5 h-5 ml-2" />
           </Button>
           <p className="text-muted-foreground/70 text-xs mt-4 italic">Build unforgettable, complex passwords using storytelling.</p>
         </motion.div>
