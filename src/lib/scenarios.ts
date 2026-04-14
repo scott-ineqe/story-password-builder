@@ -129,16 +129,16 @@ export function scorePassword(password: string): {
   if (password.length >= 16) score += 10;
 
   if (/[a-z]/.test(password) && /[A-Z]/.test(password)) score += 15;
-  else tips.push('Uppercase & Lowercase');
+  else tips.push('Mix case (Aa)');
 
   if (/\d/.test(password)) score += 15;
-  else tips.push('Numbers included');
+  else tips.push('Add numbers (123)');
 
   if (/[!@#$%^&*()_+\-=\[\]{}|;:'",.<>?/\\`~]/.test(password)) score += 15;
-  else tips.push('Special characters');
+  else tips.push('Add symbols (!@#)');
 
   if (!/(.)\1{2,}/.test(password)) score += 10;
-  else tips.push('No repeated patterns');
+  else tips.push('Avoid repeating chars');
 
   const common = ['password', '123456', 'qwerty', 'abc123', 'letmein', 'admin', 'welcome'];
   if (!common.some(c => password.toLowerCase().includes(c))) score += 10;
@@ -160,6 +160,7 @@ export function scoreCommonPassword(password: string) {
   return scorePassword(password);
 }
 
+// "Have I Been Pwned" API Check (K-Anonymity)
 export async function checkBreachedCount(password: string): Promise<number> {
   try {
     const encoder = new TextEncoder();
@@ -167,15 +168,21 @@ export async function checkBreachedCount(password: string): Promise<number> {
     const hashBuffer = await crypto.subtle.digest('SHA-1', data);
     const hashArray = Array.from(new Uint8Array(hashBuffer));
     const hashHex = hashArray.map(b => b.toString(16).padStart(2, '0')).join('').toUpperCase();
+
     const prefix = hashHex.slice(0, 5);
     const suffix = hashHex.slice(5);
+
     const response = await fetch(`https://api.pwnedpasswords.com/range/${prefix}`);
     if (!response.ok) return 0;
+
     const text = await response.text();
     const lines = text.split('\n');
+    
     for (const line of lines) {
       const [lineSuffix, count] = line.split(':');
-      if (lineSuffix === suffix) return parseInt(count.trim(), 10);
+      if (lineSuffix === suffix) {
+        return parseInt(count.trim(), 10);
+      }
     }
     return 0;
   } catch (error) {
@@ -190,7 +197,9 @@ export function simulateAttacks(password: string): AttackResult[] {
   const dictionaryAttack: AttackResult = {
     name: 'Dictionary Attack',
     timeLabel: isCommon ? 'Instant' : '> 1 month',
-    description: isCommon ? 'Cracked instantly by list matching.' : 'Not found in common dictionaries.',
+    description: isCommon 
+      ? 'Cracked instantly by automated word matching.'
+      : 'Secure against standard password dictionary lists.',
     isVulnerable: isCommon,
     type: 'dictionary'
   };
@@ -213,9 +222,11 @@ export function simulateAttacks(password: string): AttackResult[] {
   };
 
   const bruteForceAttack: AttackResult = {
-    name: 'Brute Force',
+    name: 'Brute Force Attack',
     timeLabel: formatTime(secondsToCrack),
-    description: secondsToCrack < 3600 ? 'Vulnerable to high-speed guessing.' : 'Strong mathematical defense.',
+    description: secondsToCrack < 3600 
+      ? 'Vulnerable to high-speed guessing hardware.'
+      : 'Mathematically strong against brute-force attempts.',
     isVulnerable: secondsToCrack < 3600,
     type: 'brute'
   };
@@ -224,7 +235,9 @@ export function simulateAttacks(password: string): AttackResult[] {
   const stuffingAttack: AttackResult = {
     name: 'Credential Stuffing',
     timeLabel: isSimple ? 'High Risk' : 'Low Risk',
-    description: isSimple ? 'First target in automated leak lists.' : 'Unique pattern harder to stuff.',
+    description: isSimple
+      ? 'First targets in leaked credential databases.'
+      : 'Your unique pattern is less likely to be on stuffing lists.',
     isVulnerable: isSimple,
     type: 'stuffing'
   };
