@@ -239,6 +239,48 @@ export const scenarios: Scenario[] = [
     ],
     buildPassword: (a) => `${a[0]}${a[1]}${a[2]}${a[3]}`,
     buildStory: (a) => `You jammed to "${a[0]}", sang "${a[1]}", set the tempo to ${a[2]}, and hit the final chord with "${a[3]}".`,
+  },
+  {
+    id: 'wild-companion',
+    title: 'The Wild Companion',
+    description: 'Forge an untamed password inspired by your favorite animal.',
+    icon: '🐾',
+    steps: [
+      {
+        id: 'animal',
+        prompt: 'What is your absolute favorite animal?',
+        hint: 'Think of an animal you love or resonate with.',
+        placeholder: 'e.g. Tiger',
+        type: 'text',
+        validate: (v) => v.trim().length < 2 ? 'Enter at least 2 characters' : null,
+      },
+      {
+        id: 'twist',
+        prompt: 'Name a unique feature, color, or action of this animal.',
+        hint: 'Combines with the animal for strength. e.g. Stripes, Roars, Fierce',
+        placeholder: 'e.g. Stripes',
+        type: 'text',
+        validate: (v) => v.trim().length < 2 ? 'Enter at least 2 characters' : null,
+      },
+      {
+        id: 'number',
+        prompt: 'Pick a memorable 2-digit number.',
+        hint: 'Any 2 digits you will easily remember.',
+        placeholder: 'e.g. 42',
+        type: 'number',
+        validate: (v) => /^\d{2}$/.test(v) ? null : 'Enter exactly 2 digits',
+      },
+      {
+        id: 'shield',
+        prompt: 'Choose a special character to protect your companion.',
+        hint: 'Your wild shield. Pick one: # @ ! $ & *',
+        placeholder: 'e.g. #',
+        type: 'special',
+        validate: (v) => /^[!@#$%^&*()_+\-=\[\]{}|;:'",.<>?/\\`~]$/.test(v) ? null : 'Enter exactly 1 special character',
+      },
+    ],
+    buildPassword: (a) => `${a[1]}${a[0]}${a[2]}${a[3]}`,
+    buildStory: (a) => `You channeled the "${a[1]}" of the "${a[0]}", marked it with the number ${a[2]}, and protected it with "${a[3]}".`,
   }
 ];
 
